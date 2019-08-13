@@ -9,6 +9,7 @@ import { DetailTypes } from './detail.types';
 
 const Detail = ({ match }: DetailTypes) => {
   const classes = useStyles();
+  // 実際はデータベースからツイートデータをfetchします。
   const tweet = tweetList.find(tweet => tweet.id === match.params.id);
 
   return (
