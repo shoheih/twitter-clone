@@ -1,7 +1,7 @@
 import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import Header from '../../components/header/header.component';
-import Fab from '../../components/fab/fab.component';
+import FloatingActionButton from '../../components/floating-action-button/floating-action-button.component';
 import Tweet from '../../components/tweet/tweet.component';
 import useStyles from './home.styles';
 import tweetList from '../../components/tweet/tweet.datas';
@@ -26,7 +26,7 @@ const Home = () => {
           <Tweet key={tweet.id} {...tweet} />
         ))}
       </Grid>
-      <Fab toggle={toggle} />
+      <FloatingActionButton toggle={toggle} />
       <FormDialog isShowing={isShowing} toggle={toggle} />
     </>
   );

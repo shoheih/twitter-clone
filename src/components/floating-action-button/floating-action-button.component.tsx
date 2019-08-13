@@ -1,8 +1,8 @@
 import React from 'react';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
-import useStyles from './fab.styles';
-import { FabData } from './fab.types';
+import useStyles from './floating-action-button.styles';
+import { FabData } from './floating-action-button.types';
 
 const FloatingActionButton = ({ toggle }: FabData) => {
   const classes = useStyles();
