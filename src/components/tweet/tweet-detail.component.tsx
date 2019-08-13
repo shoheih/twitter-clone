@@ -6,28 +6,15 @@ import CardContent from '@material-ui/core/CardContent';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
-import { withRouter } from 'react-router-dom';
 import useStyles from './tweet.styles';
-import { TweetTypes } from './tweet.types';
+import { TweetData } from './tweet.types';
 
-const Tweet = (props: TweetTypes) => {
+const TweetDetail = (props: TweetData) => {
   const classes = useStyles();
-  const {
-    history,
-    match,
-    id,
-    userAvatar,
-    userName,
-    imageUrl,
-    content,
-    time
-  } = props;
+  const { userAvatar, userName, imageUrl, content, time } = props;
 
   return (
-    <Card
-      onClick={() => history.push(`${match.url}tweet/${id}`)}
-      className={classes.card}
-    >
+    <Card className={classes.card}>
       <CardActionArea>
         <CardHeader
           avatar={
@@ -61,4 +48,4 @@ const Tweet = (props: TweetTypes) => {
   );
 };
 
-export default withRouter(Tweet);
+export default TweetDetail;

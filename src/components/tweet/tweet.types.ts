@@ -1,3 +1,5 @@
+import { RouteComponentProps } from 'react-router';
+
 export interface TweetData {
   id: string;
   userAvatar: string;
@@ -6,3 +8,5 @@ export interface TweetData {
   content: string;
   time: string;
 }
+
+export type TweetTypes = RouteComponentProps & TweetData;
