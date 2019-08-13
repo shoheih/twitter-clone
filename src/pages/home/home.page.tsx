@@ -5,9 +5,12 @@ import Fab from '../../components/fab/fab.component';
 import Tweet from '../../components/tweet/tweet.component';
 import useStyles from './home.styles';
 import tweetList from '../../components/tweet/tweet.datas';
+import FormDialog from '../../components/form-dialog/form-dialog.component';
+import useDialog from '../../hooks/useDialog';
 
 const Home = () => {
   const classes = useStyles();
+  const { isShowing, toggle } = useDialog();
 
   return (
     <>
@@ -23,7 +26,8 @@ const Home = () => {
           <Tweet key={tweet.id} {...tweet} />
         ))}
       </Grid>
-      <Fab />
+      <Fab toggle={toggle} />
+      <FormDialog isShowing={isShowing} toggle={toggle} />
     </>
   );
 };
