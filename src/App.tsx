@@ -4,7 +4,7 @@ import { CssBaseline } from '@material-ui/core';
 import theme from './theme';
 import Home from './pages/home/home.page';
 
-const App: React.FC = () => (
+const App = () => (
   <MuiThemeProvider theme={theme}>
     <CssBaseline />
     <Home />
