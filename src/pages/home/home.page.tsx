@@ -6,11 +6,16 @@ import Tweet from '../../components/tweet/tweet.component';
 import useStyles from './home.styles';
 import tweetList from '../../components/tweet/tweet.datas';
 import FormDialog from '../../components/form-dialog/form-dialog.component';
+import PostNew from '../../components/post-new/post-new.component';
 import useDialog from '../../hooks/useDialog';
 
 const Home = () => {
   const classes = useStyles();
   const { isShowing, toggle } = useDialog();
+  const modalOptions = {
+    title: '気になることをつぶやいてみよう！',
+    content: <PostNew />
+  };
 
   return (
     <>
@@ -27,7 +32,12 @@ const Home = () => {
         ))}
       </Grid>
       <FloatingActionButton toggle={toggle} />
-      <FormDialog isShowing={isShowing} toggle={toggle} />
+      <FormDialog
+        title={modalOptions.title}
+        content={modalOptions.content}
+        isShowing={isShowing}
+        toggle={toggle}
+      />
     </>
   );
 };
