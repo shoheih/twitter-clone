@@ -1,29 +1,49 @@
 import React from 'react';
 import Card from '@material-ui/core/Card';
+import CardHeader from '@material-ui/core/CardHeader';
+import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
+import CardActionArea from '@material-ui/core/CardActionArea';
+import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
 import useStyles from './tweet.styles';
+import { TweetData } from './tweet.types';
 
-const Tweet = () => {
+const Tweet = (props: TweetData) => {
   const classes = useStyles();
+  const { userAvatar, userName, imageUrl, content, time } = props;
 
   return (
     <Card className={classes.card}>
-      <CardContent>
-        <Typography
-          className={classes.title}
-          color="textSecondary"
-          gutterBottom
-        >
-          Word of the Day
-        </Typography>
-        <Typography className={classes.pos} color="textSecondary">
-          adjective
-        </Typography>
-        <Typography variant="body2" component="p">
-          well meaning and kindly.
-        </Typography>
-      </CardContent>
+      <CardActionArea>
+        <CardHeader
+          avatar={
+            <Avatar aria-label="tweet" className={classes.avatar}>
+              {userAvatar}
+            </Avatar>
+          }
+          title={userName}
+        />
+        {imageUrl && <CardMedia className={classes.media} image={imageUrl} />}
+        <CardContent>
+          <Typography
+            className={classes.content}
+            variant="body2"
+            color="textPrimary"
+            component="p"
+          >
+            {content}
+          </Typography>
+          <Typography
+            className={classes.time}
+            variant="caption"
+            color="textSecondary"
+            component="time"
+          >
+            {time}
+          </Typography>
+        </CardContent>
+      </CardActionArea>
     </Card>
   );
 };

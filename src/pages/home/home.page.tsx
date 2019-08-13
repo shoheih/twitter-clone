@@ -4,8 +4,9 @@ import Header from '../../components/header/header.component';
 import Fab from '../../components/fab/fab.component';
 import Tweet from '../../components/tweet/tweet.component';
 import useStyles from './home.styles';
+import tweetList from '../../components/tweet/tweet.datas';
 
-const Home: React.FC = () => {
+const Home = () => {
   const classes = useStyles();
 
   return (
@@ -18,15 +19,9 @@ const Home: React.FC = () => {
         direction="row"
         className={classes.root}
       >
-        <Tweet />
-        <Tweet />
-        <Tweet />
-        <Tweet />
-        <Tweet />
-        <Tweet />
-        <Tweet />
-        <Tweet />
-        <Tweet />
+        {tweetList.map(tweet => (
+          <Tweet key={tweet.id} {...tweet} />
+        ))}
       </Grid>
       <Fab />
     </>

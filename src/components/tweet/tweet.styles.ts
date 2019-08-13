@@ -1,21 +1,37 @@
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
-const useStyles = makeStyles(() =>
+const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     card: {
-      width: '80%',
+      width: '60%',
+      marginTop: '10px',
       marginBottom: '10px'
     },
-    bullet: {
-      display: 'inline-block',
-      margin: '0 2px',
-      transform: 'scale(0.8)'
+    media: {
+      height: 0,
+      paddingTop: '56.25%'
     },
-    title: {
-      fontSize: 14
+    expand: {
+      transform: 'rotate(0deg)',
+      marginLeft: 'auto',
+      transition: theme.transitions.create('transform', {
+        duration: theme.transitions.duration.shortest
+      })
     },
-    pos: {
-      marginBottom: 12
+    expandOpen: {
+      transform: 'rotate(180deg)'
+    },
+    avatar: {
+      backgroundColor: theme.palette.secondary.main
+    },
+    content: {
+      whiteSpace: 'pre-wrap',
+      wordBreak: 'break-all'
+    },
+    time: {
+      display: 'block',
+      marginTop: theme.spacing(2),
+      textAlign: 'right'
     }
   })
 );
