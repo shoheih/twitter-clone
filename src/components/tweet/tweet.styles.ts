@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     content: {
       whiteSpace: 'pre-wrap',
-      wordBreak: 'break-all'
+      wordBreak: 'break-word'
     },
     time: {
       display: 'block',
