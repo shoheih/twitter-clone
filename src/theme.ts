@@ -9,9 +9,9 @@ export default createMuiTheme({
       contrastText: '#fff'
     },
     secondary: {
-      light: '#62727b',
-      main: '#37474f',
-      dark: '#102027',
+      light: '#f73378',
+      main: '#f50057',
+      dark: '#ab003c',
       contrastText: '#fff'
     }
   }
