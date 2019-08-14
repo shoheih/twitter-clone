@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { auth, signInWithGoogle } from '../../firebase/firebase.utils';
+import AppContext from '../../contexts/AppContext';
 import useStyles from './header.styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
+import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import Drawer from '@material-ui/core/Drawer';
@@ -11,13 +14,14 @@ import ListItemText from '@material-ui/core/ListItemText';
 
 const Header = () => {
   const classes = useStyles();
+  const user = useContext(AppContext);
   const [drawer, setDrawer] = useState(false);
   const handleDrawer = () => setDrawer(isOpen => !isOpen);
 
   return (
     <div className={classes.root}>
       <AppBar position="static">
-        <Toolbar>
+        <Toolbar className={classes.toolBar}>
           <IconButton
             className={classes.menuButton}
             onClick={handleDrawer}
@@ -26,6 +30,15 @@ const Header = () => {
           >
             <MenuIcon />
           </IconButton>
+          {user ? (
+            <Button onClick={() => auth.signOut()} variant="contained">
+              ログアウト
+            </Button>
+          ) : (
+            <Button onClick={signInWithGoogle} variant="contained">
+              ログイン
+            </Button>
+          )}
         </Toolbar>
       </AppBar>
 

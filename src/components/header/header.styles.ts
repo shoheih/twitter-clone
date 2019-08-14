@@ -8,6 +8,10 @@ const useStyles = makeStyles(() =>
     grow: {
       flexGrow: 1
     },
+    toolBar: {
+      display: 'flex',
+      justifyContent: 'space-between'
+    },
     menuButton: {
       marginLeft: -12,
       marginRight: 20
