@@ -16,11 +16,11 @@ const App = () => {
     const unregisterAuthObserver = auth.onAuthStateChanged(async userAuth => {
       if (userAuth) {
         const userRef = await createUserProfileDocument(userAuth);
-
-        userRef &&
+        if (userRef) {
           userRef.onSnapshot(snapShot => {
-            setUser(snapShot.data());
+            setUser({ ...snapShot.data(), id: snapShot.id });
           });
+        }
       } else {
         setUser(undefined);
       }
