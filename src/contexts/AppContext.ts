@@ -1,6 +1,6 @@
 import { createContext } from 'react';
-import { User } from 'firebase';
+import { UserType } from '../firebase/firebase.types';
 
-const AppContext = createContext<User | null>(null);
+const AppContext = createContext<UserType>(undefined);
 
 export default AppContext;

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { User } from 'firebase';
-import { auth } from './firebase/firebase.utils';
+import { auth, createUserProfileDocument } from './firebase/firebase.utils';
+import { UserType } from './firebase/firebase.types';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import { CssBaseline } from '@material-ui/core';
 import { Switch, Route } from 'react-router-dom';
@@ -10,11 +10,20 @@ import Home from './pages/home/home.page';
 import Detail from './pages/detail/detail.page';
 
 const App = () => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<UserType>(undefined);
 
   useEffect(() => {
-    const unregisterAuthObserver = auth.onAuthStateChanged(user => {
-      setUser(user);
+    const unregisterAuthObserver = auth.onAuthStateChanged(async userAuth => {
+      if (userAuth) {
+        const userRef = await createUserProfileDocument(userAuth);
+
+        userRef &&
+          userRef.onSnapshot(snapShot => {
+            setUser(snapShot.data());
+          });
+      } else {
+        setUser(undefined);
+      }
     });
     return unregisterAuthObserver;
   }, []);
