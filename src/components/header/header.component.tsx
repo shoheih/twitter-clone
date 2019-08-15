@@ -7,6 +7,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
+import Avatar from '@material-ui/core/Avatar';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -31,12 +32,24 @@ const Header = () => {
             <MenuIcon />
           </IconButton>
           {user ? (
-            <Button onClick={() => auth.signOut()} variant="contained">
-              ログアウト
-            </Button>
+            <div className={classes.userArea}>
+              <Button>
+                <Avatar className={classes.avatar} src={`${user.photoURL}`} />
+                <span className={classes.userName}>{user.displayName}</span>
+              </Button>
+              <Button
+                className={classes.loginAndLogoutButton}
+                onClick={() => auth.signOut()}
+              >
+                Logout
+              </Button>
+            </div>
           ) : (
-            <Button onClick={signInWithGoogle} variant="contained">
-              ログイン
+            <Button
+              className={classes.loginAndLogoutButton}
+              onClick={signInWithGoogle}
+            >
+              sign in with google
             </Button>
           )}
         </Toolbar>
