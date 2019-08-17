@@ -2,8 +2,9 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import useStyles from './post-delete.styles';
+import { PostDeleteType } from './post-delete.types';
 
-const PostDelete = () => {
+const PostDelete = ({ id }: PostDeleteType) => {
   const classes = useStyles();
 
   return (

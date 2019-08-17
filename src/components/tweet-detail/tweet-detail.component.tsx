@@ -1,7 +1,6 @@
 import React from 'react';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
-import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Avatar from '@material-ui/core/Avatar';
@@ -15,26 +14,37 @@ import { TweetDetailData } from '../tweet-detail/tweet-detail.types';
 const TweetDetail = (props: TweetDetailData) => {
   const classes = useStyles();
   const {
-    userAvatar,
-    userName,
-    imageUrl,
-    content,
-    time,
+    body,
+    createdAt,
+    authorName,
+    authorThumbnailURL,
     editToggle,
     deleteToggle
   } = props;
+
+  const getDateFormat = (createdAt: firebase.firestore.Timestamp) => {
+    const date = createdAt.toDate();
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const day = date.getDate();
+    const hour = date.getHours();
+    const minutes = date.getMinutes();
+
+    return `${year}/${month}/${day} ${hour}:${minutes}`;
+  };
 
   return (
     <Card className={classes.card}>
       <CardHeader
         avatar={
-          <Avatar aria-label="tweet" className={classes.avatar}>
-            {userAvatar}
-          </Avatar>
+          <Avatar
+            aria-label="tweet"
+            className={classes.avatar}
+            src={`${authorThumbnailURL}`}
+          />
         }
-        title={userName}
+        title={authorName}
       />
-      {imageUrl && <CardMedia className={classes.media} image={imageUrl} />}
       <CardContent>
         <Typography
           className={classes.time}
@@ -42,7 +52,7 @@ const TweetDetail = (props: TweetDetailData) => {
           color="textSecondary"
           component="time"
         >
-          {time}
+          {getDateFormat(createdAt)}
         </Typography>
         <Typography
           className={classes.content}
@@ -50,7 +60,7 @@ const TweetDetail = (props: TweetDetailData) => {
           color="textPrimary"
           component="p"
         >
-          {content}
+          {body}
         </Typography>
       </CardContent>
       <CardActions>

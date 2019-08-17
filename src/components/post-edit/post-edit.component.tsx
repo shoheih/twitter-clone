@@ -2,8 +2,9 @@ import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import useStyles from './post-edit.styles';
+import { PostEditType } from './post-edit.types';
 
-const PostEdit = () => {
+const PostEdit = ({ id }: PostEditType) => {
   const classes = useStyles();
 
   return (
