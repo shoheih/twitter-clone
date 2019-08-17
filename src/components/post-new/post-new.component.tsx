@@ -38,7 +38,7 @@ const PostNew = ({ toggle }: PostNewTypes) => {
       <Button
         className={classes.button}
         variant="contained"
-        disabled={value ? false : true}
+        disabled={!value.match(/\S/g) ? true : false}
         color="primary"
         type="submit"
       >
