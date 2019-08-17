@@ -30,7 +30,7 @@ const Detail = ({ match }: DetailTypes) => {
       setIsLoading(false);
     };
     fetchTweet();
-  }, []);
+  }, [match.params.id]);
 
   return (
     <>
@@ -49,6 +49,7 @@ const Detail = ({ match }: DetailTypes) => {
             <TweetDetail
               body={tweet.body}
               createdAt={tweet.createdAt}
+              authorId={tweet.author.id}
               authorName={tweet.author.displayName}
               authorThumbnailURL={tweet.author.photoURL}
               editToggle={editToggle}
@@ -57,18 +58,22 @@ const Detail = ({ match }: DetailTypes) => {
           )
         )}
       </Grid>
-      <FormDialog
-        title={'つぶやきを編集しよう！'}
-        content={<PostEdit id={match.params.id} />}
-        isShowing={isEditShowing}
-        toggle={editToggle}
-      />
-      <FormDialog
-        title={'つぶやきを削除しますか？'}
-        content={<PostDelete id={match.params.id} />}
-        isShowing={isDeleteShowing}
-        toggle={deleteToggle}
-      />
+      {tweet && (
+        <>
+          <FormDialog
+            title={'つぶやきを編集しよう！'}
+            content={<PostEdit id={match.params.id} body={tweet.body} />}
+            isShowing={isEditShowing}
+            toggle={editToggle}
+          />
+          <FormDialog
+            title={'つぶやきを削除しますか？'}
+            content={<PostDelete id={match.params.id} />}
+            isShowing={isDeleteShowing}
+            toggle={deleteToggle}
+          />
+        </>
+      )}
     </>
   );
 };

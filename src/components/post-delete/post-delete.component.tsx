@@ -1,4 +1,5 @@
 import React from 'react';
+import { firestore } from '../../firebase/firebase.utils';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import useStyles from './post-delete.styles';
@@ -6,6 +7,15 @@ import { PostDeleteType } from './post-delete.types';
 
 const PostDelete = ({ id }: PostDeleteType) => {
   const classes = useStyles();
+
+  const handleDelete = async () => {
+    await firestore
+      .collection('posts')
+      .doc(id)
+      .delete();
+
+    window.location.href = '/';
+  };
 
   return (
     <div className={classes.root}>
@@ -17,6 +27,7 @@ const PostDelete = ({ id }: PostDeleteType) => {
         variant="contained"
         disabled={false}
         color="secondary"
+        onClick={handleDelete}
       >
         削除する
       </Button>

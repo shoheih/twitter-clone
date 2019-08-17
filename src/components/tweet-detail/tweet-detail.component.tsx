@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import AppContext from '../../contexts/AppContext';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
@@ -13,9 +14,11 @@ import { TweetDetailData } from '../tweet-detail/tweet-detail.types';
 
 const TweetDetail = (props: TweetDetailData) => {
   const classes = useStyles();
+  const user = useContext(AppContext);
   const {
     body,
     createdAt,
+    authorId,
     authorName,
     authorThumbnailURL,
     editToggle,
@@ -31,6 +34,27 @@ const TweetDetail = (props: TweetDetailData) => {
     const minutes = date.getMinutes();
 
     return `${year}/${month}/${day} ${hour}:${minutes}`;
+  };
+
+  const renderEditAndDeleteIcon = () => {
+    if (!user) return null;
+
+    if (user.id === authorId) {
+      return (
+        <>
+          <CardActions>
+            <IconButton aria-label="delete tweet" onClick={deleteToggle}>
+              <DeleteIcon />
+            </IconButton>
+            <IconButton aria-label="edit icon" onClick={editToggle}>
+              <EditIcon />
+            </IconButton>
+          </CardActions>
+        </>
+      );
+    } else {
+      return null;
+    }
   };
 
   return (
@@ -63,14 +87,7 @@ const TweetDetail = (props: TweetDetailData) => {
           {body}
         </Typography>
       </CardContent>
-      <CardActions>
-        <IconButton aria-label="delete tweet" onClick={deleteToggle}>
-          <DeleteIcon />
-        </IconButton>
-        <IconButton aria-label="edit icon" onClick={editToggle}>
-          <EditIcon />
-        </IconButton>
-      </CardActions>
+      {renderEditAndDeleteIcon()}
     </Card>
   );
 };
