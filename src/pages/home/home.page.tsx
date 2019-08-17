@@ -12,10 +12,6 @@ import useDialog from '../../hooks/useDialog';
 const Home = () => {
   const classes = useStyles();
   const { isShowing, toggle } = useDialog();
-  const modalOptions = {
-    title: '気になることをつぶやいてみよう！',
-    content: <PostNew />
-  };
 
   return (
     <>
@@ -33,8 +29,8 @@ const Home = () => {
       </Grid>
       <FloatingActionButton toggle={toggle} />
       <FormDialog
-        title={modalOptions.title}
-        content={modalOptions.content}
+        title={'気になることをつぶやいてみよう！'}
+        content={<PostNew toggle={toggle} />}
         isShowing={isShowing}
         toggle={toggle}
       />
