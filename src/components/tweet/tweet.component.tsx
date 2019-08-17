@@ -1,7 +1,6 @@
 import React from 'react';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
-import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import Avatar from '@material-ui/core/Avatar';
@@ -16,12 +15,22 @@ const Tweet = (props: TweetTypes) => {
     history,
     match,
     id,
-    userAvatar,
-    userName,
-    imageUrl,
-    content,
-    time
+    body,
+    createdAt,
+    authorName,
+    authorThumbnailURL
   } = props;
+
+  const getDateFormat = (createdAt: firebase.firestore.Timestamp) => {
+    const date = createdAt.toDate();
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const day = date.getDate();
+    const hour = date.getHours();
+    const minutes = date.getMinutes();
+
+    return `${year}/${month}/${day} ${hour}:${minutes}`;
+  };
 
   return (
     <Card
@@ -31,13 +40,14 @@ const Tweet = (props: TweetTypes) => {
       <CardActionArea>
         <CardHeader
           avatar={
-            <Avatar aria-label="tweet" className={classes.avatar}>
-              {userAvatar}
-            </Avatar>
+            <Avatar
+              aria-label="tweet"
+              className={classes.avatar}
+              src={`${authorThumbnailURL}`}
+            />
           }
-          title={userName}
+          title={authorName}
         />
-        {imageUrl && <CardMedia className={classes.media} image={imageUrl} />}
         <CardContent>
           <Typography
             className={classes.content}
@@ -45,7 +55,7 @@ const Tweet = (props: TweetTypes) => {
             color="textPrimary"
             component="p"
           >
-            {content}
+            {body}
           </Typography>
           <Typography
             className={classes.time}
@@ -53,7 +63,7 @@ const Tweet = (props: TweetTypes) => {
             color="textSecondary"
             component="time"
           >
-            {time}
+            {getDateFormat(createdAt)}
           </Typography>
         </CardContent>
       </CardActionArea>

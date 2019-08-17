@@ -1,12 +1,12 @@
 import { RouteComponentProps } from 'react-router';
+import { firestore } from 'firebase';
 
 export interface TweetData {
   id: string;
-  userAvatar: string;
-  userName: string;
-  imageUrl?: string;
-  content: string;
-  time: string;
+  body: string;
+  createdAt: firestore.Timestamp;
+  authorName: string;
+  authorThumbnailURL: string;
 }
 
 export type TweetTypes = RouteComponentProps & TweetData;

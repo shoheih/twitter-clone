@@ -22,6 +22,7 @@ const PostNew = ({ toggle }: PostNewTypes) => {
       createdAt: new Date()
     });
     toggle();
+    window.location.reload();
   };
 
   return (
