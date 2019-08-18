@@ -13,23 +13,76 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 const Home = () => {
   const classes = useStyles();
   const { isShowing, toggle } = useDialog();
+
   const [tweets, setTweets] = useState<
     firebase.firestore.QueryDocumentSnapshot[]
   >([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const limit = 10;
+  const [numberOfTweets, setNumberOfTweets] = useState(0);
+  const [
+    lastVisible,
+    setLastVisible
+  ] = useState<firebase.firestore.QueryDocumentSnapshot | null>(null);
+  const [isInitialFetching, setIsInitialFetching] = useState(false);
+  const [isMoreFetching, setIsMoreFetching] = useState(false);
+
+  const getNumberOfTweet = async () => {
+    const querySnapShot = await firestore.collection('posts').get();
+    setNumberOfTweets(querySnapShot.docs.length);
+  };
+
+  const fetchInitialTweets = async () => {
+    const postsQuerySnapShot = await firestore
+      .collection('posts')
+      .orderBy('createdAt', 'desc')
+      .limit(limit)
+      .get();
+    setLastVisible(postsQuerySnapShot.docs[postsQuerySnapShot.docs.length - 1]);
+    setTweets(postsQuerySnapShot.docs);
+    setIsInitialFetching(false);
+  };
+
+  const fetchMoreTweets = async () => {
+    const postsQuerySnapShot = await firestore
+      .collection('posts')
+      .orderBy('createdAt', 'desc')
+      .startAfter(lastVisible)
+      .limit(limit)
+      .get();
+    setLastVisible(postsQuerySnapShot.docs[postsQuerySnapShot.docs.length - 1]);
+    setTweets(acc => [...acc, ...postsQuerySnapShot.docs]);
+    setIsMoreFetching(false);
+  };
+
+  const handleScroll = () => {
+    if (
+      window.innerHeight + document.documentElement.scrollTop !==
+      document.documentElement.offsetHeight
+    )
+      return;
+    setIsMoreFetching(true);
+  };
+
+  const isCompleteInfiniteScroll = () => {
+    return tweets.length === numberOfTweets;
+  };
 
   useEffect(() => {
-    const fetchTweet = async () => {
-      setIsLoading(true);
-      const postsRef = firestore.collection('posts');
-      const postsQuerySnapShot = await postsRef
-        .orderBy('createdAt', 'desc')
-        .get();
-      setTweets(postsQuerySnapShot.docs);
-      setIsLoading(false);
-    };
-    fetchTweet();
+    getNumberOfTweet();
+    setIsInitialFetching(true);
+    fetchInitialTweets();
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  useEffect(() => {
+    if (!isMoreFetching || isCompleteInfiniteScroll()) {
+      return;
+    }
+    fetchMoreTweets();
+    // isCompleteInfiniteScrollとfetchMoreTweetsは第二引数から除外する
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isMoreFetching]);
 
   return (
     <>
@@ -38,10 +91,10 @@ const Home = () => {
         container
         justify="center"
         alignItems="center"
-        direction="row"
+        direction="column"
         className={classes.root}
       >
-        {isLoading ? (
+        {isInitialFetching ? (
           <CircularProgress />
         ) : (
           tweets.map(tweet => {
@@ -58,6 +111,7 @@ const Home = () => {
             );
           })
         )}
+        {isMoreFetching && !isCompleteInfiniteScroll() && <CircularProgress />}
       </Grid>
       <FloatingActionButton toggle={toggle} />
       <FormDialog
