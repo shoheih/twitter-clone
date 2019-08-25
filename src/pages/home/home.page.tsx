@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { firestore } from '../../firebase/firebase.utils';
 import Grid from '@material-ui/core/Grid';
 import Header from '../../components/header/header.component';
@@ -17,28 +17,30 @@ const Home = () => {
   const [tweets, setTweets] = useState<
     firebase.firestore.QueryDocumentSnapshot[]
   >([]);
-  const limit = 10;
-  const [numberOfTweets, setNumberOfTweets] = useState(0);
-  const [
-    lastVisible,
-    setLastVisible
-  ] = useState<firebase.firestore.QueryDocumentSnapshot | null>(null);
-  const [isInitialFetching, setIsInitialFetching] = useState(false);
+  const LIMIT = 10;
+  const [isInitialFetching, setIsInitialFetching] = useState(true);
   const [isMoreFetching, setIsMoreFetching] = useState(false);
-
-  const getNumberOfTweet = async () => {
-    const querySnapShot = await firestore.collection('posts').get();
-    setNumberOfTweets(querySnapShot.docs.length);
-  };
+  const isCompleteRef = useRef<boolean>(false);
+  const lastVisibleRef = useRef<firebase.firestore.QueryDocumentSnapshot | null>(
+    null
+  );
 
   const fetchInitialTweets = async () => {
     const postsQuerySnapShot = await firestore
       .collection('posts')
       .orderBy('createdAt', 'desc')
-      .limit(limit)
+      .limit(LIMIT + 1)
       .get();
-    setLastVisible(postsQuerySnapShot.docs[postsQuerySnapShot.docs.length - 1]);
-    setTweets(postsQuerySnapShot.docs);
+    if (postsQuerySnapShot.docs.length < LIMIT + 1) {
+      isCompleteRef.current = true;
+      lastVisibleRef.current =
+        postsQuerySnapShot.docs[postsQuerySnapShot.docs.length - 1];
+      setTweets(postsQuerySnapShot.docs);
+    } else {
+      lastVisibleRef.current =
+        postsQuerySnapShot.docs[postsQuerySnapShot.docs.length - 2];
+      setTweets(postsQuerySnapShot.docs.slice(0, LIMIT));
+    }
     setIsInitialFetching(false);
   };
 
@@ -46,11 +48,19 @@ const Home = () => {
     const postsQuerySnapShot = await firestore
       .collection('posts')
       .orderBy('createdAt', 'desc')
-      .startAfter(lastVisible)
-      .limit(limit)
+      .startAfter(lastVisibleRef.current)
+      .limit(LIMIT + 1)
       .get();
-    setLastVisible(postsQuerySnapShot.docs[postsQuerySnapShot.docs.length - 1]);
-    setTweets(acc => [...acc, ...postsQuerySnapShot.docs]);
+    if (postsQuerySnapShot.docs.length < LIMIT + 1) {
+      isCompleteRef.current = true;
+      lastVisibleRef.current =
+        postsQuerySnapShot.docs[postsQuerySnapShot.docs.length - 1];
+      setTweets(acc => [...acc, ...postsQuerySnapShot.docs]);
+    } else {
+      lastVisibleRef.current =
+        postsQuerySnapShot.docs[postsQuerySnapShot.docs.length - 2];
+      setTweets(acc => [...acc, ...postsQuerySnapShot.docs.slice(0, LIMIT)]);
+    }
     setIsMoreFetching(false);
   };
 
@@ -63,25 +73,17 @@ const Home = () => {
     setIsMoreFetching(true);
   };
 
-  const isCompleteInfiniteScroll = () => {
-    return tweets.length === numberOfTweets;
-  };
-
   useEffect(() => {
-    getNumberOfTweet();
-    setIsInitialFetching(true);
     fetchInitialTweets();
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   useEffect(() => {
-    if (!isMoreFetching || isCompleteInfiniteScroll()) {
+    if (!isMoreFetching || isCompleteRef.current) {
       return;
     }
     fetchMoreTweets();
-    // isCompleteInfiniteScrollとfetchMoreTweetsは第二引数から除外する
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isMoreFetching]);
 
   return (
@@ -111,7 +113,7 @@ const Home = () => {
             );
           })
         )}
-        {isMoreFetching && !isCompleteInfiniteScroll() && <CircularProgress />}
+        {isMoreFetching && !isCompleteRef.current && <CircularProgress />}
       </Grid>
       <FloatingActionButton toggle={toggle} />
       <FormDialog
