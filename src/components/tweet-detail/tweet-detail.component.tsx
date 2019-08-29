@@ -17,6 +17,7 @@ const TweetDetail = (props: TweetDetailData) => {
   const user = useContext(AppContext);
   const {
     body,
+    imgUrl,
     createdAt,
     authorId,
     authorName,
@@ -86,6 +87,13 @@ const TweetDetail = (props: TweetDetailData) => {
         >
           {body}
         </Typography>
+        {imgUrl ? (
+          <img
+            className={classes.media}
+            src={imgUrl}
+            alt={`${authorName}_photo`}
+          />
+        ) : null}
       </CardContent>
       {renderEditAndDeleteIcon()}
     </Card>

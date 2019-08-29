@@ -8,8 +8,8 @@ const useStyles = makeStyles((theme: Theme) =>
       marginBottom: '10px'
     },
     media: {
-      height: 0,
-      paddingTop: '56.25%'
+      display: 'block',
+      margin: '0 auto'
     },
     expand: {
       transform: 'rotate(0deg)',
@@ -26,7 +26,8 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     content: {
       whiteSpace: 'pre-wrap',
-      wordBreak: 'break-word'
+      wordBreak: 'break-word',
+      marginBottom: theme.spacing(2)
     },
     time: {
       display: 'block',

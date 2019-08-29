@@ -8,8 +8,8 @@ const useStyles = makeStyles((theme: Theme) =>
       marginBottom: '10px'
     },
     media: {
-      height: 0,
-      paddingTop: '46.25%'
+      display: 'block',
+      margin: '0 auto'
     },
     expand: {
       transform: 'rotate(0deg)',

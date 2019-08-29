@@ -16,6 +16,7 @@ const Tweet = (props: TweetTypes) => {
     match,
     id,
     body,
+    imgUrl,
     createdAt,
     authorName,
     authorThumbnailURL
@@ -57,6 +58,13 @@ const Tweet = (props: TweetTypes) => {
           >
             {body}
           </Typography>
+          {imgUrl ? (
+            <img
+              className={classes.media}
+              src={imgUrl}
+              alt={`${authorName}_photo`}
+            />
+          ) : null}
           <Typography
             className={classes.time}
             variant="caption"

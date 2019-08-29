@@ -106,6 +106,7 @@ const Home = () => {
                 key={tweet.id}
                 id={tweet.id}
                 body={data.body}
+                imgUrl={data.imgUrl}
                 createdAt={data.createdAt}
                 authorName={data.author.displayName}
                 authorThumbnailURL={data.author.photoURL}
