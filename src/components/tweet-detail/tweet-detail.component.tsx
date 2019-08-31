@@ -7,7 +7,6 @@ import CardActions from '@material-ui/core/CardActions';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
-import EditIcon from '@material-ui/icons/Edit';
 import Typography from '@material-ui/core/Typography';
 import useStyles from './tweet-detail.styles';
 import { TweetDetailData } from '../tweet-detail/tweet-detail.types';
@@ -22,7 +21,6 @@ const TweetDetail = (props: TweetDetailData) => {
     authorId,
     authorName,
     authorThumbnailURL,
-    editToggle,
     deleteToggle
   } = props;
 
@@ -46,9 +44,6 @@ const TweetDetail = (props: TweetDetailData) => {
           <CardActions>
             <IconButton aria-label="delete tweet" onClick={deleteToggle}>
               <DeleteIcon />
-            </IconButton>
-            <IconButton aria-label="edit icon" onClick={editToggle}>
-              <EditIcon />
             </IconButton>
           </CardActions>
         </>

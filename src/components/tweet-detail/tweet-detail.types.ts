@@ -7,6 +7,5 @@ export interface TweetDetailData {
   authorId: string;
   authorName: string;
   authorThumbnailURL: string;
-  editToggle: () => void;
   deleteToggle: () => void;
 }

@@ -7,14 +7,12 @@ import Header from '../../components/header/header.component';
 import TweetDetail from '../../components/tweet-detail/tweet-detail.component';
 import useStyles from './detail.styles';
 import FormDialog from '../../components/form-dialog/form-dialog.component';
-import PostEdit from '../../components/post-edit/post-edit.component';
 import PostDelete from '../../components/post-delete/post-delete.component';
 import useDialog from '../../hooks/useDialog';
 import { DetailTypes } from './detail.types';
 
 const Detail = ({ match }: DetailTypes) => {
   const classes = useStyles();
-  const { isShowing: isEditShowing, toggle: editToggle } = useDialog();
   const { isShowing: isDeleteShowing, toggle: deleteToggle } = useDialog();
   const [tweet, setTweet] = useState<
     firebase.firestore.DocumentData | undefined
@@ -53,27 +51,18 @@ const Detail = ({ match }: DetailTypes) => {
               authorId={tweet.author.id}
               authorName={tweet.author.displayName}
               authorThumbnailURL={tweet.author.photoURL}
-              editToggle={editToggle}
               deleteToggle={deleteToggle}
             />
           )
         )}
       </Grid>
       {tweet && (
-        <>
-          <FormDialog
-            title={'つぶやきを編集しよう！'}
-            content={<PostEdit id={match.params.id} body={tweet.body} />}
-            isShowing={isEditShowing}
-            toggle={editToggle}
-          />
-          <FormDialog
-            title={'つぶやきを削除しますか？'}
-            content={<PostDelete id={match.params.id} imgUrl={tweet.imgUrl} />}
-            isShowing={isDeleteShowing}
-            toggle={deleteToggle}
-          />
-        </>
+        <FormDialog
+          title={'つぶやきを削除しますか？'}
+          content={<PostDelete id={match.params.id} imgUrl={tweet.imgUrl} />}
+          isShowing={isDeleteShowing}
+          toggle={deleteToggle}
+        />
       )}
     </>
   );
