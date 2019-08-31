@@ -12,20 +12,22 @@ const PostNew = ({ toggle }: PostNewTypes) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const user = useContext(AppContext);
 
+  const submitImage = async () => {
+    if (!user) return;
+    const storageRef = storage.ref('images');
+    const uploadImgName = `${user.displayName}/${String(Date.now())}.jpeg`;
+    const imgRef = storageRef.child(uploadImgName);
+    await imgRef.putString(imgData, 'data_url');
+    return storageRef.child(uploadImgName).getDownloadURL();
+  };
+
   const submitPost = async (
     event: React.FormEvent<HTMLFormElement>
   ): Promise<void> => {
     event.preventDefault();
     const postRef = firestore.collection('posts');
-    const storageRef = storage.ref('images');
-    if (user) {
-      const uploadImgName = `${user.displayName}/${String(Date.now())}.jpeg`;
-      const imgRef = storageRef.child(uploadImgName);
-      imgRef
-        .putString(imgData, 'data_url')
-        .then(() => {
-          return storageRef.child(uploadImgName).getDownloadURL();
-        })
+    if (imgData) {
+      submitImage()
         .then(url => {
           return postRef.doc().set({
             body: value,
@@ -38,6 +40,14 @@ const PostNew = ({ toggle }: PostNewTypes) => {
           toggle();
           window.location.reload();
         });
+    } else {
+      await postRef.doc().set({
+        body: value,
+        author: { ...user },
+        createdAt: new Date()
+      });
+      toggle();
+      window.location.reload();
     }
   };
 
