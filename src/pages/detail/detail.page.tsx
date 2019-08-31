@@ -69,7 +69,7 @@ const Detail = ({ match }: DetailTypes) => {
           />
           <FormDialog
             title={'つぶやきを削除しますか？'}
-            content={<PostDelete id={match.params.id} />}
+            content={<PostDelete id={match.params.id} imgUrl={tweet.imgUrl} />}
             isShowing={isDeleteShowing}
             toggle={deleteToggle}
           />
