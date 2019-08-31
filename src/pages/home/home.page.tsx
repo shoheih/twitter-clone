@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
+import AppContext from '../../contexts/AppContext';
 import { firestore } from '../../firebase/firebase.utils';
 import Grid from '@material-ui/core/Grid';
 import Header from '../../components/header/header.component';
@@ -12,6 +13,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 
 const Home = () => {
   const classes = useStyles();
+  const user = useContext(AppContext);
   const { isShowing, toggle } = useDialog();
 
   const [tweets, setTweets] = useState<
@@ -116,13 +118,17 @@ const Home = () => {
         )}
         {isMoreFetching && !isCompleteRef.current && <CircularProgress />}
       </Grid>
-      <FloatingActionButton toggle={toggle} />
-      <FormDialog
-        title={'気になることをつぶやいてみよう！'}
-        content={<PostNew toggle={toggle} />}
-        isShowing={isShowing}
-        toggle={toggle}
-      />
+      {user && (
+        <>
+          <FloatingActionButton toggle={toggle} />
+          <FormDialog
+            title={'気になることをつぶやいてみよう！'}
+            content={<PostNew toggle={toggle} />}
+            isShowing={isShowing}
+            toggle={toggle}
+          />
+        </>
+      )}
     </>
   );
 };
