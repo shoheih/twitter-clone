@@ -4,7 +4,7 @@ import { firestore } from 'firebase';
 export interface TweetData {
   id: string;
   body: string;
-  imgUrl: string | undefined;
+  imgUrl?: string;
   createdAt: firestore.Timestamp;
   authorName: string;
   authorThumbnailURL: string;
