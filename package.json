@@ -5,17 +5,21 @@
   "dependencies": {
     "@material-ui/core": "^4.3.1",
     "@material-ui/icons": "^4.2.1",
+    "@types/enzyme": "^3.10.3",
+    "@types/enzyme-adapter-react-16": "^1.0.5",
     "@types/firebase": "^3.2.1",
     "@types/jest": "^24.0.17",
     "@types/node": "^12.7.0",
     "@types/react": "^16.8.24",
     "@types/react-dom": "^16.8.5",
     "@types/react-router-dom": "^4.3.4",
+    "@types/react-test-renderer": "^16.9.0",
     "firebase": "^6.3.5",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-router-dom": "^5.0.1",
     "react-scripts": "3.0.1",
+    "ts-jest": "^24.0.2",
     "typescript": "^3.4.5"
   },
   "scripts": {
@@ -44,6 +48,7 @@
     "@typescript-eslint/parser": "^1.13.0",
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.14.0",
+    "enzyme-to-json": "^3.4.0",
     "eslint-config-prettier": "^6.0.0",
     "eslint-config-react": "^1.1.7",
     "eslint-config-standard": "^13.0.1",
@@ -55,7 +60,8 @@
     "husky": "^3.0.2",
     "jest-enzyme": "^7.1.0",
     "lint-staged": "^9.2.1",
-    "prettier": "^1.18.2"
+    "prettier": "^1.18.2",
+    "react-test-renderer": "^16.8.6"
   },
   "husky": {
     "hooks": {
