@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
+import useReactRouter from 'use-react-router';
 import AppContext from '../../contexts/AppContext';
 import { firestore } from '../../firebase/firebase.utils';
 import Grid from '@material-ui/core/Grid';
@@ -13,6 +14,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 
 const Home = () => {
   const classes = useStyles();
+  const { history, match } = useReactRouter();
   const user = useContext(AppContext);
   const { isShowing, toggle } = useDialog();
 
@@ -106,12 +108,14 @@ const Home = () => {
             return (
               <Tweet
                 key={tweet.id}
-                id={tweet.id}
                 body={data.body}
                 imgUrl={data.imgUrl}
-                createdAt={data.createdAt}
+                createdAt={data.createdAt.toDate()}
                 authorName={data.author.displayName}
                 authorThumbnailURL={data.author.photoURL}
+                click={() => {
+                  history.push(`${match.url}tweet/${tweet.id}`);
+                }}
               />
             );
           })

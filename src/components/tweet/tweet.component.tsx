@@ -5,39 +5,23 @@ import CardContent from '@material-ui/core/CardContent';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
-import { withRouter } from 'react-router-dom';
 import useStyles from './tweet.styles';
-import { TweetTypes } from './tweet.types';
+import { TweetData } from './tweet.types';
+import { getPostingTimeString } from '../../utils/func';
 
-const Tweet = (props: TweetTypes) => {
+const Tweet = (props: TweetData) => {
   const classes = useStyles();
   const {
-    history,
-    match,
-    id,
     body,
     imgUrl,
     createdAt,
     authorName,
-    authorThumbnailURL
+    authorThumbnailURL,
+    click
   } = props;
 
-  const getDateFormat = (createdAt: firebase.firestore.Timestamp) => {
-    const date = createdAt.toDate();
-    const year = date.getFullYear();
-    const month = date.getMonth();
-    const day = date.getDate();
-    const hour = date.getHours();
-    const minutes = date.getMinutes();
-
-    return `${year}/${month}/${day} ${hour}:${minutes}`;
-  };
-
   return (
-    <Card
-      onClick={() => history.push(`${match.url}tweet/${id}`)}
-      className={classes.card}
-    >
+    <Card onClick={click} className={classes.card}>
       <CardActionArea>
         <CardHeader
           avatar={
@@ -47,7 +31,7 @@ const Tweet = (props: TweetTypes) => {
               src={`${authorThumbnailURL}`}
             />
           }
-          title={authorName}
+          title={`@${authorName}・${getPostingTimeString(createdAt)}`}
         />
         <CardContent>
           <Typography
@@ -65,18 +49,10 @@ const Tweet = (props: TweetTypes) => {
               alt={`${authorName}_photo`}
             />
           ) : null}
-          <Typography
-            className={classes.time}
-            variant="caption"
-            color="textSecondary"
-            component="time"
-          >
-            {getDateFormat(createdAt)}
-          </Typography>
         </CardContent>
       </CardActionArea>
     </Card>
   );
 };
 
-export default withRouter(Tweet);
+export default Tweet;

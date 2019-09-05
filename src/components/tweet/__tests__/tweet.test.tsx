@@ -3,39 +3,38 @@ import { mount } from 'enzyme';
 import { MemoryRouter } from 'react-router-dom';
 import { firestore } from '../../../firebase/firebase.utils';
 import Tweet from '../tweet.component';
+import { TweetData } from '../tweet.types';
 
-let postQuerySnapShot: firebase.firestore.QuerySnapshot;
+let documentData: firebase.firestore.DocumentData;
 beforeAll(async () => {
-  postQuerySnapShot = await firestore
+  const postQuerySnapShot = await firestore
     .collection('posts')
     .orderBy('createdAt', 'desc')
     .limit(1)
     .get()
     .then();
+  const queryDocumentSnapshot = postQuerySnapShot.docs;
+  documentData = queryDocumentSnapshot[0].data();
 });
 
 describe('<Tweet />', () => {
   test('history push', () => {
-    const queryDocumentSnapshot = postQuerySnapShot.docs;
-    const documentData = queryDocumentSnapshot[0].data();
     const historyMock = {
       push: jest.fn()
     };
-    const props = {
-      history: historyMock,
-      id: queryDocumentSnapshot[0].id,
+    const props: TweetData = {
       body: documentData.body,
       imgUrl: documentData.imgUrl,
-      createdAt: documentData.createdAt,
+      createdAt: documentData.createdAt.toDate(),
       authorName: documentData.author.displayName,
-      authorThumbnailURL: documentData.author.photoURL
+      authorThumbnailURL: documentData.author.photoURL,
+      click: historyMock.push
     };
     const wrap = mount(
       <MemoryRouter initialEntries={['/']} initialIndex={0}>
         <Tweet {...props} />;
       </MemoryRouter>
     );
-    expect(wrap.find('Tweet').find('div.MuiPaper-root').length).toBe(1);
     wrap
       .find('Tweet')
       .find('div.MuiPaper-root')
