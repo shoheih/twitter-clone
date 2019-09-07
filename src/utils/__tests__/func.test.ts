@@ -1,14 +1,21 @@
 import { getPostingTimeString } from '../func';
 
-describe('Utils', () => {
-  test('getPostingTimeString', () => {
-    const now = new Date();
-    const anHourAgo = new Date(now.getTime() - 1000 * 60 * 60);
-    const aMinuteAgo = new Date(now.getTime() - 1000 * 60);
-    const oneSecondAgo = new Date(now.getTime() - 1000 * 1);
+describe('getPostingTimeString method with the argument', () => {
+  const now = new Date();
+  const moreThanOneDayAgo = new Date(2019, 4 - 1);
+  const anHourAgo = new Date(now.getTime() - 1000 * 60 * 60);
+  const aMinuteAgo = new Date(now.getTime() - 1000 * 60);
+  const oneSecondAgo = new Date(now.getTime() - 1000 * 1);
 
-    expect(getPostingTimeString(anHourAgo)).toEqual('1h');
-    expect(getPostingTimeString(aMinuteAgo)).toEqual('1m');
-    expect(getPostingTimeString(oneSecondAgo)).toEqual('1s');
+  describe.each`
+    createdAt            | expected
+    ${moreThanOneDayAgo} | ${'Apr 1'}
+    ${anHourAgo}         | ${'1h ago'}
+    ${aMinuteAgo}        | ${'1m ago'}
+    ${oneSecondAgo}      | ${'1s ago'}
+  `('$createdAt', ({ createdAt, expected }) => {
+    test(`returns ${expected}`, () => {
+      expect(getPostingTimeString(createdAt)).toBe(expected);
+    });
   });
 });

@@ -20,10 +20,10 @@ export const getPostingTimeString = (createdAt: Date) => {
   if (elapsed.getUTCDate() - 1) {
     return `${monthNames[createdAt.getMonth()]} ${createdAt.getDate()}`;
   } else if (elapsed.getUTCHours()) {
-    return `${elapsed.getUTCHours()}h`;
+    return `${elapsed.getUTCHours()}h ago`;
   } else if (elapsed.getUTCMinutes()) {
-    return `${elapsed.getUTCMinutes()}m`;
+    return `${elapsed.getUTCMinutes()}m ago`;
   } else {
-    return `${elapsed.getUTCSeconds()}s`;
+    return `${elapsed.getUTCSeconds()}s ago`;
   }
 };
