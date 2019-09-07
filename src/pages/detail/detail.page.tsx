@@ -47,7 +47,7 @@ const Detail = ({ match }: DetailTypes) => {
             <TweetDetail
               body={tweet.body}
               imgUrl={tweet.imgUrl}
-              createdAt={tweet.createdAt}
+              createdAt={tweet.createdAt.toDate()}
               authorId={tweet.author.id}
               authorName={tweet.author.displayName}
               authorThumbnailURL={tweet.author.photoURL}

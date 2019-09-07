@@ -10,6 +10,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import Typography from '@material-ui/core/Typography';
 import useStyles from './tweet-detail.styles';
 import { TweetDetailData } from '../tweet-detail/tweet-detail.types';
+import { getPostingTimeStringAll } from '../../utils/func';
 
 const TweetDetail = (props: TweetDetailData) => {
   const classes = useStyles();
@@ -23,17 +24,6 @@ const TweetDetail = (props: TweetDetailData) => {
     authorThumbnailURL,
     deleteToggle
   } = props;
-
-  const getDateFormat = (createdAt: firebase.firestore.Timestamp) => {
-    const date = createdAt.toDate();
-    const year = date.getFullYear();
-    const month = date.getMonth();
-    const day = date.getDate();
-    const hour = date.getHours();
-    const minutes = date.getMinutes();
-
-    return `${year}/${month}/${day} ${hour}:${minutes}`;
-  };
 
   const renderEditAndDeleteIcon = () => {
     if (!user) return null;
@@ -72,7 +62,7 @@ const TweetDetail = (props: TweetDetailData) => {
           color="textSecondary"
           component="time"
         >
-          {getDateFormat(createdAt)}
+          {getPostingTimeStringAll(createdAt)}
         </Typography>
         <Typography
           className={classes.content}
