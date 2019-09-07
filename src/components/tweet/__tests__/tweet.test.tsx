@@ -1,6 +1,5 @@
 import React from 'react';
 import { mount } from 'enzyme';
-import { MemoryRouter } from 'react-router-dom';
 import { firestore } from '../../../firebase/firebase.utils';
 import Tweet from '../tweet.component';
 import { TweetData } from '../tweet.types';
@@ -30,11 +29,7 @@ beforeEach(async () => {
 
 describe('Mock Function', () => {
   test('is called', () => {
-    const wrap = mount(
-      <MemoryRouter initialEntries={['/']} initialIndex={0}>
-        <Tweet {...props} />;
-      </MemoryRouter>
-    );
+    const wrap = mount(<Tweet {...props} />);
     wrap
       .find('Tweet')
       .find('div.MuiPaper-root')
@@ -43,11 +38,7 @@ describe('Mock Function', () => {
   });
 
   test('is not called', () => {
-    mount(
-      <MemoryRouter initialEntries={['/']} initialIndex={0}>
-        <Tweet {...props} />;
-      </MemoryRouter>
-    );
+    mount(<Tweet {...props} />);
     expect(historyPushMock.mock.calls.length).toBe(0);
   });
 });
