@@ -2,7 +2,9 @@ import React, { useState, useEffect, useRef, useContext } from 'react';
 import useReactRouter from 'use-react-router';
 import AppContext from '../../contexts/AppContext';
 import { firestore } from '../../firebase/firebase.utils';
+import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
+import Box from '@material-ui/core/Box';
 import Header from '../../components/header/header.component';
 import FloatingActionButton from '../../components/floating-action-button/floating-action-button.component';
 import Tweet from '../../components/tweet/tweet.component';
@@ -10,7 +12,7 @@ import useStyles from './home.styles';
 import FormDialog from '../../components/form-dialog/form-dialog.component';
 import PostNew from '../../components/post-new/post-new.component';
 import useDialog from '../../hooks/useDialog';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import Progress from '../../components/progress/progress.component';
 
 const Home = () => {
   const classes = useStyles();
@@ -69,11 +71,12 @@ const Home = () => {
   };
 
   const handleScroll = () => {
-    if (
-      window.innerHeight + document.documentElement.scrollTop !==
-      document.documentElement.offsetHeight
-    )
-      return;
+    const top = document.documentElement.scrollTop || document.body.scrollTop;
+    const isScrollBottom =
+      window.innerHeight + top - document.documentElement.offsetHeight >= -200
+        ? true
+        : false;
+    if (!isScrollBottom) return;
     setIsMoreFetching(true);
   };
 
@@ -93,46 +96,50 @@ const Home = () => {
   return (
     <>
       <Header />
-      <Grid
-        container
-        justify="center"
-        alignItems="center"
-        direction="column"
-        className={classes.root}
-      >
-        {isInitialFetching ? (
-          <CircularProgress />
-        ) : (
-          tweets.map(tweet => {
-            const data = tweet.data();
-            return (
-              <Tweet
-                key={tweet.id}
-                body={data.body}
-                imgUrl={data.imgUrl}
-                createdAt={data.createdAt.toDate()}
-                authorName={data.author.displayName}
-                authorThumbnailURL={data.author.photoURL}
-                click={() => {
-                  history.push(`${match.url}tweet/${tweet.id}`);
-                }}
-              />
-            );
-          })
+      <Container maxWidth="sm">
+        <Grid
+          container
+          justify="center"
+          alignItems="center"
+          direction="column"
+          className={classes.root}
+        >
+          {isInitialFetching ? (
+            <Progress />
+          ) : (
+            tweets.map(tweet => {
+              const data = tweet.data();
+              return (
+                <Tweet
+                  key={tweet.id}
+                  body={data.body}
+                  imgUrl={data.imgUrl}
+                  createdAt={data.createdAt.toDate()}
+                  authorName={data.author.displayName}
+                  authorThumbnailURL={data.author.photoURL}
+                  click={() => {
+                    history.push(`${match.url}tweet/${tweet.id}`);
+                  }}
+                />
+              );
+            })
+          )}
+          <Box className={classes.progress}>
+            {isMoreFetching && !isCompleteRef.current && <Progress />}
+          </Box>
+        </Grid>
+        {user && (
+          <>
+            <FloatingActionButton toggle={toggle} />
+            <FormDialog
+              title={'気になることをつぶやいてみよう！'}
+              content={<PostNew toggle={toggle} />}
+              isShowing={isShowing}
+              toggle={toggle}
+            />
+          </>
         )}
-        {isMoreFetching && !isCompleteRef.current && <CircularProgress />}
-      </Grid>
-      {user && (
-        <>
-          <FloatingActionButton toggle={toggle} />
-          <FormDialog
-            title={'気になることをつぶやいてみよう！'}
-            content={<PostNew toggle={toggle} />}
-            isShowing={isShowing}
-            toggle={toggle}
-          />
-        </>
-      )}
+      </Container>
     </>
   );
 };

@@ -3,13 +3,16 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     card: {
-      width: '60%',
+      width: '100%',
       marginTop: '10px',
       marginBottom: '10px'
     },
     media: {
-      display: 'block',
-      margin: '0 auto'
+      width: '100%',
+      paddingTop: '56.25%',
+      backgroundColor: '#000',
+      backgroundSize: 'auto',
+      borderRadius: '4px'
     },
     expand: {
       transform: 'rotate(0deg)',

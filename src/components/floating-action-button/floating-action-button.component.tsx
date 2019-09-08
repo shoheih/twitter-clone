@@ -1,6 +1,6 @@
 import React from 'react';
 import Fab from '@material-ui/core/Fab';
-import AddIcon from '@material-ui/icons/Add';
+import Chat from '@material-ui/icons/Chat';
 import useStyles from './floating-action-button.styles';
 import { FabData } from './floating-action-button.types';
 
@@ -14,7 +14,7 @@ const FloatingActionButton = ({ toggle }: FabData) => {
       aria-label="add"
       className={classes.root}
     >
-      <AddIcon />
+      <Chat />
     </Fab>
   );
 };

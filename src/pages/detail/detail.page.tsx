@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { firestore } from '../../firebase/firebase.utils';
 import { withRouter } from 'react-router-dom';
+import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import Header from '../../components/header/header.component';
 import TweetDetail from '../../components/tweet-detail/tweet-detail.component';
 import useStyles from './detail.styles';
@@ -10,6 +10,7 @@ import FormDialog from '../../components/form-dialog/form-dialog.component';
 import PostDelete from '../../components/post-delete/post-delete.component';
 import useDialog from '../../hooks/useDialog';
 import { DetailTypes } from './detail.types';
+import Progress from '../../components/progress/progress.component';
 
 const Detail = ({ match }: DetailTypes) => {
   const classes = useStyles();
@@ -33,29 +34,31 @@ const Detail = ({ match }: DetailTypes) => {
   return (
     <>
       <Header />
-      <Grid
-        container
-        justify="center"
-        alignItems="center"
-        direction="row"
-        className={classes.root}
-      >
-        {isLoading ? (
-          <CircularProgress />
-        ) : (
-          tweet && (
-            <TweetDetail
-              body={tweet.body}
-              imgUrl={tweet.imgUrl}
-              createdAt={tweet.createdAt.toDate()}
-              authorId={tweet.author.id}
-              authorName={tweet.author.displayName}
-              authorThumbnailURL={tweet.author.photoURL}
-              deleteToggle={deleteToggle}
-            />
-          )
-        )}
-      </Grid>
+      <Container maxWidth="sm">
+        <Grid
+          container
+          justify="center"
+          alignItems="center"
+          direction="row"
+          className={classes.root}
+        >
+          {isLoading ? (
+            <Progress />
+          ) : (
+            tweet && (
+              <TweetDetail
+                body={tweet.body}
+                imgUrl={tweet.imgUrl}
+                createdAt={tweet.createdAt.toDate()}
+                authorId={tweet.author.id}
+                authorName={tweet.author.displayName}
+                authorThumbnailURL={tweet.author.photoURL}
+                deleteToggle={deleteToggle}
+              />
+            )
+          )}
+        </Grid>
+      </Container>
       {tweet && (
         <FormDialog
           title={'つぶやきを削除しますか？'}

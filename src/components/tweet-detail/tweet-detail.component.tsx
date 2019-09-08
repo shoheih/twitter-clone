@@ -3,6 +3,7 @@ import AppContext from '../../contexts/AppContext';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
+import CardMedia from '@material-ui/core/CardMedia';
 import CardActions from '@material-ui/core/CardActions';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
@@ -30,13 +31,9 @@ const TweetDetail = (props: TweetDetailData) => {
 
     if (user.id === authorId) {
       return (
-        <>
-          <CardActions>
-            <IconButton aria-label="delete tweet" onClick={deleteToggle}>
-              <DeleteIcon />
-            </IconButton>
-          </CardActions>
-        </>
+        <IconButton aria-label="delete tweet" onClick={deleteToggle}>
+          <DeleteIcon />
+        </IconButton>
       );
     } else {
       return null;
@@ -57,14 +54,6 @@ const TweetDetail = (props: TweetDetailData) => {
       />
       <CardContent>
         <Typography
-          className={classes.time}
-          variant="caption"
-          color="textSecondary"
-          component="time"
-        >
-          {getPostingTimeStringAll(createdAt)}
-        </Typography>
-        <Typography
           className={classes.content}
           variant="body2"
           color="textPrimary"
@@ -73,14 +62,19 @@ const TweetDetail = (props: TweetDetailData) => {
           {body}
         </Typography>
         {imgUrl ? (
-          <img
+          <CardMedia
             className={classes.media}
-            src={imgUrl}
-            alt={`${authorName}_photo`}
+            image={imgUrl}
+            title={`${authorName}_photo`}
           />
         ) : null}
       </CardContent>
-      {renderEditAndDeleteIcon()}
+      <CardActions className={classes.action}>
+        <Typography variant="caption" color="textSecondary" component="time">
+          {getPostingTimeStringAll(createdAt)}
+        </Typography>
+        {renderEditAndDeleteIcon()}
+      </CardActions>
     </Card>
   );
 };

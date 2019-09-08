@@ -55,8 +55,8 @@ const PostNew = ({ toggle }: PostNewTypes) => {
     const canvas = canvasRef.current;
     if (canvas) {
       const ctx = canvas.getContext('2d');
-      let maxW = 250;
-      let maxH = 250;
+      let maxW = 450;
+      let maxH = 350;
 
       let img = new Image();
       img.onload = () => {

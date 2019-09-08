@@ -2,6 +2,7 @@ import React from 'react';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
+import CardMedia from '@material-ui/core/CardMedia';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
@@ -31,7 +32,8 @@ const Tweet = (props: TweetData) => {
               src={`${authorThumbnailURL}`}
             />
           }
-          title={`@${authorName}・${getPostingTimeString(createdAt)}`}
+          title={authorName}
+          subheader={getPostingTimeString(createdAt)}
         />
         <CardContent>
           <Typography
@@ -43,10 +45,10 @@ const Tweet = (props: TweetData) => {
             {body}
           </Typography>
           {imgUrl ? (
-            <img
+            <CardMedia
               className={classes.media}
-              src={imgUrl}
-              alt={`${authorName}_photo`}
+              image={imgUrl}
+              title={`${authorName}_photo`}
             />
           ) : null}
         </CardContent>
