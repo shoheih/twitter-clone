@@ -1,7 +1,12 @@
 import React, { useState, useContext } from 'react';
-import { auth, signInWithGoogle } from '../../firebase/firebase.utils';
+import {
+  auth,
+  signInWithGoogle,
+  signInWithSampleUser
+} from '../../firebase/firebase.utils';
 import AppContext from '../../contexts/AppContext';
 import useStyles from './header.styles';
+import Box from '@material-ui/core/Box';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Button from '@material-ui/core/Button';
@@ -45,12 +50,20 @@ const Header = () => {
               </Button>
             </div>
           ) : (
-            <Button
-              className={classes.loginAndLogoutButton}
-              onClick={signInWithGoogle}
-            >
-              sign in with google
-            </Button>
+            <Box>
+              <Button
+                className={classes.loginAndLogoutButton}
+                onClick={signInWithGoogle}
+              >
+                sign in with google
+              </Button>
+              <Button
+                className={classes.loginAndLogoutButton}
+                onClick={signInWithSampleUser}
+              >
+                sign in with sample user
+              </Button>
+            </Box>
           )}
         </Toolbar>
       </AppBar>

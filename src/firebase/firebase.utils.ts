@@ -2,7 +2,7 @@ import * as firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
 import 'firebase/storage';
-import { firebaseConfig } from './firebase.config';
+import { firebaseConfig, sampleUserConfig } from './firebase.config';
 import { UserType } from './firebase.types';
 
 firebase.initializeApp(firebaseConfig);
@@ -13,6 +13,11 @@ export const storage = firebase.storage();
 const provider = new firebase.auth.GoogleAuthProvider();
 provider.setCustomParameters({ prompt: 'select_account' });
 export const signInWithGoogle = () => auth.signInWithRedirect(provider);
+export const signInWithSampleUser = () =>
+  auth.signInWithEmailAndPassword(
+    sampleUserConfig.email,
+    sampleUserConfig.password
+  );
 export default firebase;
 
 export const createUserProfileDocument = async (userAuth: UserType) => {
