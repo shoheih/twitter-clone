@@ -1,4 +1,8 @@
-import { getPostingTimeString, getPostingTimeStringAll } from '../func';
+import {
+  getPostingTimeString,
+  getPostingTimeStringAll,
+  isEmptyInput
+} from '../func';
 
 describe('getPostingTimeString method with the argument', () => {
   const now = new Date();
@@ -23,7 +27,6 @@ describe('getPostingTimeString method with the argument', () => {
 
 describe('getPostingTimeStringAll method with the argument', () => {
   const case1 = new Date('2014/04/01 12:30');
-  const case2 = new Date('2017/07/30 20:30');
   const case3 = new Date('2020/06/15 12:00');
 
   describe.each`
@@ -33,6 +36,19 @@ describe('getPostingTimeStringAll method with the argument', () => {
   `('$createdAt', ({ createdAt, expected }) => {
     test(`returns ${expected}`, () => {
       expect(getPostingTimeStringAll(createdAt)).toBe(expected);
+    });
+  });
+});
+
+describe('isEmptyInput method with the argument', () => {
+  describe.each`
+    value       | expected
+    ${''}       | ${true}
+    ${' '}      | ${true}
+    ${'string'} | ${false}
+  `('$value', ({ value, expected }) => {
+    test(`returns ${expected}`, () => {
+      expect(isEmptyInput(value)).toBe(expected);
     });
   });
 });

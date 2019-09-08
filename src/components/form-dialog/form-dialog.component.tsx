@@ -5,7 +5,6 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import { FormDialogData } from './form-dialog.types';
 
 const FormDialog = ({ title, content, isShowing, toggle }: FormDialogData) => {
-  // このコンポーネントは編集ダイアログでも使用します。
   return (
     <Dialog
       open={isShowing}

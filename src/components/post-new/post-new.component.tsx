@@ -1,16 +1,23 @@
-import React, { useState, useContext, useRef } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import { firestore, storage } from '../../firebase/firebase.utils';
 import AppContext from '../../contexts/AppContext';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import useStyles from './post-new.styles';
 import { PostNewTypes } from './post-new.types';
+import { isEmptyInput } from '../../utils/func';
+
 const PostNew = ({ toggle }: PostNewTypes) => {
   const classes = useStyles();
+  const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
   const [value, setValue] = useState('');
   const [imgData, setImageData] = useState('');
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const user = useContext(AppContext);
+
+  useEffect(() => {
+    setIsSubmitDisabled(isEmptyInput(value));
+  }, [value]);
 
   const submitImage = async () => {
     if (!user) return;
@@ -24,6 +31,7 @@ const PostNew = ({ toggle }: PostNewTypes) => {
   const submitPost = async (
     event: React.FormEvent<HTMLFormElement>
   ): Promise<void> => {
+    setIsSubmitDisabled(true);
     event.preventDefault();
     const postRef = firestore.collection('posts');
     if (imgData) {
@@ -77,6 +85,11 @@ const PostNew = ({ toggle }: PostNewTypes) => {
     }
   };
 
+  const handleChangeValue = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const target = event.target as HTMLInputElement;
+    setValue(target.value);
+  };
+
   const handleChangeFile = (event: React.ChangeEvent<HTMLInputElement>) => {
     const target = event.target as HTMLInputElement;
     if (target.files) {
@@ -92,7 +105,7 @@ const PostNew = ({ toggle }: PostNewTypes) => {
         margin="normal"
         fullWidth
         value={value}
-        onChange={e => setValue(e.target.value)}
+        onChange={handleChangeValue}
         name="body"
       />
       <input
@@ -105,7 +118,7 @@ const PostNew = ({ toggle }: PostNewTypes) => {
       <Button
         className={classes.button}
         variant="contained"
-        disabled={!value.match(/\S/g) ? true : false}
+        disabled={isSubmitDisabled}
         color="primary"
         type="submit"
       >

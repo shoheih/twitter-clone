@@ -37,3 +37,7 @@ export const getPostingTimeStringAll = (createdAt: Date) => {
   const year = createdAt.getUTCFullYear();
   return `${hours}:${minutes} ${month} ${date}, ${year}`;
 };
+
+export const isEmptyInput = (value: string) => {
+  return !value.match(/\S/g);
+};
