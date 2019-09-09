@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import AppContext from '../../contexts/AppContext';
+import UserContext from '../../contexts/UserContext';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
@@ -15,7 +15,7 @@ import { getPostingTimeStringAll } from '../../utils/func';
 
 const TweetDetail = (props: TweetDetailData) => {
   const classes = useStyles();
-  const user = useContext(AppContext);
+  const user = useContext(UserContext);
   const {
     body,
     imgUrl,

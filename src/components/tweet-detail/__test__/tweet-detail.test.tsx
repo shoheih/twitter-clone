@@ -3,7 +3,7 @@ import { mount } from 'enzyme';
 import { firestore } from '../../../firebase/firebase.utils';
 import TweetDetail from '../tweet-detail.component';
 import { TweetDetailData } from '../tweet-detail.types';
-import AppContext from '../../../contexts/AppContext';
+import AppContext from '../../../contexts/UserContext';
 
 let props: TweetDetailData;
 let deleteToggleMock = jest.fn();

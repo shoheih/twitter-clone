@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext, useRef } from 'react';
 import { firestore, storage } from '../../firebase/firebase.utils';
-import AppContext from '../../contexts/AppContext';
+import UserContext from '../../contexts/UserContext';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import useStyles from './post-new.styles';
@@ -13,7 +13,7 @@ const PostNew = ({ toggle }: PostNewTypes) => {
   const [value, setValue] = useState('');
   const [imgData, setImageData] = useState('');
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const user = useContext(AppContext);
+  const user = useContext(UserContext);
 
   useEffect(() => {
     setIsSubmitDisabled(isEmptyInput(value));

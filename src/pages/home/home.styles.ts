@@ -3,7 +3,7 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      paddingTop: theme.spacing(10)
+      paddingTop: theme.spacing(14)
     },
     grid: {
       flexGrow: 1,
@@ -16,6 +16,17 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center'
+    },
+    userArea: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center'
+    },
+    avatar: {
+      marginRight: 10
+    },
+    loginAndLogoutButton: {
+      marginLeft: 20
     }
   })
 );

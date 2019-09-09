@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import useReactRouter from 'use-react-router';
-import AppContext from '../../contexts/AppContext';
-import { firestore } from '../../firebase/firebase.utils';
+import UserContext from '../../contexts/UserContext';
+import { firestore, signInWithSampleUser } from '../../firebase/firebase.utils';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
+import Avatar from '@material-ui/core/Avatar';
 import Header from '../../components/header/header.component';
 import FloatingActionButton from '../../components/floating-action-button/floating-action-button.component';
 import Tweet from '../../components/tweet/tweet.component';
@@ -17,7 +19,7 @@ import Progress from '../../components/progress/progress.component';
 const Home = () => {
   const classes = useStyles();
   const { history, match } = useReactRouter();
-  const user = useContext(AppContext);
+  const user = useContext(UserContext);
   const { isShowing, toggle } = useDialog();
 
   const [tweets, setTweets] = useState<
@@ -97,6 +99,23 @@ const Home = () => {
     <>
       <Header />
       <Container maxWidth="sm" className={classes.root}>
+        <Box className={classes.userArea}>
+          {user ? (
+            <div>
+              <Button>
+                <Avatar className={classes.avatar} src={`${user.photoURL}`} />
+                <span>{user.displayName}</span>
+              </Button>
+            </div>
+          ) : (
+            <Button
+              className={classes.loginAndLogoutButton}
+              onClick={signInWithSampleUser}
+            >
+              sign in with sample user
+            </Button>
+          )}
+        </Box>
         <Grid
           container
           justify="center"
