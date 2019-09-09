@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react';
+import useReactRouter from 'use-react-router';
 import {
   auth,
   signInWithGoogle,
@@ -6,7 +7,6 @@ import {
 } from '../../firebase/firebase.utils';
 import AppContext from '../../contexts/AppContext';
 import useStyles from './header.styles';
-import Box from '@material-ui/core/Box';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Button from '@material-ui/core/Button';
@@ -16,17 +16,22 @@ import Avatar from '@material-ui/core/Avatar';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import Home from '@material-ui/icons/Home';
+import Mail from '@material-ui/icons/Mail';
+import ExitToApp from '@material-ui/icons/ExitToApp';
 
 const Header = () => {
   const classes = useStyles();
+  const { history } = useReactRouter();
   const user = useContext(AppContext);
   const [drawer, setDrawer] = useState(false);
   const handleDrawer = () => setDrawer(isOpen => !isOpen);
 
   return (
     <div className={classes.root}>
-      <AppBar position="static">
+      <AppBar position="fixed">
         <Toolbar className={classes.toolBar}>
           <IconButton
             className={classes.menuButton}
@@ -42,37 +47,45 @@ const Header = () => {
                 <Avatar className={classes.avatar} src={`${user.photoURL}`} />
                 <span className={classes.userName}>{user.displayName}</span>
               </Button>
-              <Button
-                className={classes.loginAndLogoutButton}
-                onClick={() => auth.signOut()}
-              >
-                Logout
-              </Button>
             </div>
           ) : (
-            <Box>
-              <Button
-                className={classes.loginAndLogoutButton}
-                onClick={signInWithGoogle}
-              >
-                sign in with google
-              </Button>
-              <Button
-                className={classes.loginAndLogoutButton}
-                onClick={signInWithSampleUser}
-              >
-                sign in with sample user
-              </Button>
-            </Box>
+            <Button
+              className={classes.loginAndLogoutButton}
+              onClick={signInWithSampleUser}
+            >
+              sign in with sample user
+            </Button>
           )}
         </Toolbar>
       </AppBar>
 
       <Drawer open={drawer} onClick={handleDrawer}>
         <List>
-          <ListItem button>
+          <ListItem
+            button
+            onClick={() => {
+              history.push('/');
+            }}
+          >
+            <ListItemIcon>
+              <Home />
+            </ListItemIcon>
             <ListItemText secondary="Home" />
           </ListItem>
+          <ListItem button onClick={signInWithGoogle}>
+            <ListItemIcon>
+              <Mail />
+            </ListItemIcon>
+            <ListItemText secondary="Sign in with google" />
+          </ListItem>
+          {user ? (
+            <ListItem button onClick={() => auth.signOut()}>
+              <ListItemIcon>
+                <ExitToApp />
+              </ListItemIcon>
+              <ListItemText secondary="Logout" />
+            </ListItem>
+          ) : null}
         </List>
       </Drawer>
     </div>

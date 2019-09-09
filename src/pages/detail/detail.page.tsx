@@ -34,13 +34,13 @@ const Detail = ({ match }: DetailTypes) => {
   return (
     <>
       <Header />
-      <Container maxWidth="sm">
+      <Container maxWidth="sm" className={classes.root}>
         <Grid
           container
           justify="center"
           alignItems="center"
           direction="row"
-          className={classes.root}
+          className={classes.grid}
         >
           {isLoading ? (
             <Progress />
