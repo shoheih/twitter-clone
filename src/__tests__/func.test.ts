@@ -2,7 +2,7 @@ import {
   getPostingTimeString,
   getPostingTimeStringAll,
   isEmptyInput
-} from '../func';
+} from '../utils/func';
 
 describe('getPostingTimeString method with the argument', () => {
   const now = new Date();

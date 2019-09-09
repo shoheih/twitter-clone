@@ -1,8 +1,8 @@
 import React from 'react';
 import { mount } from 'enzyme';
-import { firestore } from '../../../firebase/firebase.utils';
-import Tweet from '../tweet.component';
-import { TweetData } from '../tweet.types';
+import { firestore } from '../firebase/firebase.utils';
+import Tweet from '../components/tweet/tweet.component';
+import { TweetData } from '../components/tweet/tweet.types';
 
 let props: TweetData;
 let historyPushMock = jest.fn();

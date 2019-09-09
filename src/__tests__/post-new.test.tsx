@@ -1,9 +1,9 @@
 import React from 'react';
 import { mount } from 'enzyme';
-import PostNew from '../../post-new/post-new.component';
-import { isEmptyInput } from '../../../utils/func';
+import PostNew from '../components/post-new/post-new.component';
+import { isEmptyInput } from '../utils/func';
 
-jest.mock('../../../utils/func');
+jest.mock('../utils/func');
 const toggle = jest.fn(() => {});
 
 describe('Submit button', () => {

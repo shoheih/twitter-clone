@@ -1,9 +1,9 @@
 import React from 'react';
 import { mount } from 'enzyme';
-import { firestore } from '../../../firebase/firebase.utils';
-import TweetDetail from '../tweet-detail.component';
-import { TweetDetailData } from '../tweet-detail.types';
-import AppContext from '../../../contexts/UserContext';
+import { firestore } from '../firebase/firebase.utils';
+import TweetDetail from '../components/tweet-detail/tweet-detail.component';
+import { TweetDetailData } from '../components/tweet-detail/tweet-detail.types';
+import AppContext from '../contexts/UserContext';
 
 let props: TweetDetailData;
 let deleteToggleMock = jest.fn();
