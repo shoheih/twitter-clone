@@ -6,8 +6,7 @@ const useStyles = makeStyles((theme: Theme) =>
       paddingTop: theme.spacing(10)
     },
     grid: {
-      flexGrow: 1,
-      padding: theme.spacing(1)
+      flexGrow: 1
     },
     caption: { textAlign: 'center', width: '100%' }
   })

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import useReactRouter from 'use-react-router';
 import { firestore } from '../../firebase/firebase.utils';
 import { withRouter } from 'react-router-dom';
 import Container from '@material-ui/core/Container';
@@ -11,9 +12,12 @@ import PostDelete from '../../components/post-delete/post-delete.component';
 import useDialog from '../../hooks/useDialog';
 import { DetailTypes } from './detail.types';
 import Progress from '../../components/progress/progress.component';
+import IconButton from '@material-ui/core/IconButton';
+import ArrowBack from '@material-ui/icons/ArrowBack';
 
 const Detail = ({ match }: DetailTypes) => {
   const classes = useStyles();
+  const { history } = useReactRouter();
   const { isShowing: isDeleteShowing, toggle: deleteToggle } = useDialog();
   const [tweet, setTweet] = useState<
     firebase.firestore.DocumentData | undefined
@@ -35,6 +39,14 @@ const Detail = ({ match }: DetailTypes) => {
     <>
       <Header />
       <Container maxWidth="sm" className={classes.root}>
+        <IconButton
+          onClick={() => {
+            history.goBack();
+          }}
+          aria-label="back"
+        >
+          <ArrowBack />
+        </IconButton>
         <Grid
           container
           justify="center"
