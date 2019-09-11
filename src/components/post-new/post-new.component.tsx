@@ -21,8 +21,8 @@ const PostNew = ({ toggle }: PostNewTypes) => {
 
   const submitImage = async () => {
     if (!user) return;
-    const storageRef = storage.ref('images');
-    const uploadImgName = `${user.displayName}/${String(Date.now())}.jpeg`;
+    const storageRef = storage.ref('users');
+    const uploadImgName = `${user.id}/${String(Date.now())}.jpeg`;
     const imgRef = storageRef.child(uploadImgName);
     await imgRef.putString(imgData, 'data_url');
     return storageRef.child(uploadImgName).getDownloadURL();
