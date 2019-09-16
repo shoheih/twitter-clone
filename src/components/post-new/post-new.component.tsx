@@ -1,20 +1,21 @@
 import React, { useState, useEffect, useContext, useRef } from 'react';
 import { firestore, storage } from '../../firebase/firebase.utils';
 import UserContext from '../../contexts/UserContext';
+import TweetContext from '../../contexts/TweetContext';
 import TextField from '@material-ui/core/TextField';
-import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import useStyles from './post-new.styles';
 import { PostNewTypes } from './post-new.types';
 import { isEmptyInput } from '../../utils/func';
 
-const PostNew = ({ hide }: PostNewTypes) => {
+const PostNew = () => {
   const classes = useStyles();
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
   const [value, setValue] = useState('');
   const [imgData, setImageData] = useState('');
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const user = useContext(UserContext);
+  const { fetchSingleTweet } = useContext(TweetContext);
 
   useEffect(() => {
     setIsSubmitDisabled(isEmptyInput(value));
@@ -45,18 +46,18 @@ const PostNew = ({ hide }: PostNewTypes) => {
             createdAt: new Date()
           });
         })
-        .then(() => {
-          hide();
-          window.location.reload();
-        });
+        .then(() => {});
     } else {
-      await postRef.doc().set({
+      const batch = firestore.batch();
+      const id = postRef.doc().id;
+      batch.set(postRef.doc(id), {
         body: value,
         author: { ...user.userInfo },
         createdAt: new Date()
       });
-      hide();
-      window.location.reload();
+      batch.commit().then(() => {
+        fetchSingleTweet(id);
+      });
     }
   };
 
@@ -116,26 +117,15 @@ const PostNew = ({ hide }: PostNewTypes) => {
         onChange={handleChangeFile}
       />
       <canvas ref={canvasRef} width="0" height="0" />
-      <Box>
-        <Button
-          className={classes.button}
-          variant="contained"
-          onClick={hide}
-          color="secondary"
-          type="button"
-        >
-          キャンセル
-        </Button>
-        <Button
-          className={classes.button}
-          variant="contained"
-          disabled={isSubmitDisabled}
-          color="primary"
-          type="submit"
-        >
-          つぶやく
-        </Button>
-      </Box>
+      <Button
+        className={classes.button}
+        variant="contained"
+        disabled={isSubmitDisabled}
+        color="primary"
+        type="submit"
+      >
+        つぶやく
+      </Button>
     </form>
   );
 };

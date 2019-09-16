@@ -4,7 +4,9 @@ import { firestore } from '../firebase/firebase.utils';
 const useInfiniteScroll = () => {
   const LIMIT = 10;
   const [tweets, setTweets] = useState<
-    firebase.firestore.QueryDocumentSnapshot[]
+    (
+      | firebase.firestore.QueryDocumentSnapshot
+      | firebase.firestore.DocumentSnapshot)[]
   >([]);
   const [isInitialFetching, setIsInitialFetching] = useState(true);
   const [isMoreFetching, setIsMoreFetching] = useState(false);
@@ -13,6 +15,17 @@ const useInfiniteScroll = () => {
   const lastVisibleRef = useRef<firebase.firestore.QueryDocumentSnapshot | null>(
     null
   );
+
+  const fetchSingleTweet = async (id: string) => {
+    const documentSnapShot = await firestore
+      .collection('posts')
+      .doc(id)
+      .get();
+
+    if (documentSnapShot.exists) {
+      setTweets(acc => [documentSnapShot, ...acc]);
+    }
+  };
 
   const fetchInitialTweets = useCallback(() => {
     const func = async () => {
@@ -73,6 +86,7 @@ const useInfiniteScroll = () => {
 
   return {
     tweets,
+    fetchSingleTweet,
     isInitialFetching,
     isMoreFetching,
     isCompleteRef,

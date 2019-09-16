@@ -11,8 +11,6 @@ import Typography from '@material-ui/core/Typography';
 import Header from '../../components/header/header.component';
 import Tweet from '../../components/tweet/tweet.component';
 import useStyles from './home.styles';
-import ToggleContent from '../../components/toggle-content/toggle-content.component';
-import Modal from '../../components/modal/modal.component';
 import PostNew from '../../components/post-new/post-new.component';
 import Progress from '../../components/progress/progress.component';
 
@@ -54,11 +52,13 @@ const Home = () => {
           direction="column"
           className={classes.grid}
         >
+          <PostNew />
           {isInitialFetching ? (
             <Progress />
           ) : (
             tweets.map(tweet => {
               const data = tweet.data();
+              if (!data) return;
               return (
                 <Tweet
                   key={tweet.id}
@@ -84,7 +84,7 @@ const Home = () => {
             )}
           </Box>
         </Grid>
-        {user.userInfo && (
+        {/* {user.userInfo && (
           <ToggleContent
             toggle={show => (
               <Fab className={classes.fab} onClick={show}>
@@ -97,7 +97,7 @@ const Home = () => {
               </Modal>
             )}
           />
-        )}
+        )} */}
       </Container>
     </>
   );
