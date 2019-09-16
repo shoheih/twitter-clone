@@ -37,7 +37,11 @@ const Detail = ({ match }: DetailTypes) => {
       <Container maxWidth="sm" className={classes.root}>
         <IconButton
           onClick={() => {
-            history.push('/');
+            if (history.location.state && history.location.state.isFromHome) {
+              history.goBack();
+            } else {
+              history.push('/');
+            }
           }}
           aria-label="back"
         >
