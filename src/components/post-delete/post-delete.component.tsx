@@ -5,7 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import useStyles from './post-delete.styles';
 import { PostDeleteType } from './post-delete.types';
 
-const PostDelete = ({ id, imgUrl }: PostDeleteType) => {
+const PostDelete = ({ id, imgUrl, hide }: PostDeleteType) => {
   const classes = useStyles();
 
   const deleteImage = async () => {
@@ -29,6 +29,15 @@ const PostDelete = ({ id, imgUrl }: PostDeleteType) => {
       <Typography variant="body2" component="p" color="secondary">
         ※削除したつぶやきは元に戻せません
       </Typography>
+      <Button
+        className={classes.button}
+        variant="contained"
+        onClick={hide}
+        color="secondary"
+        type="button"
+      >
+        キャンセル
+      </Button>
       <Button
         className={classes.button}
         variant="contained"

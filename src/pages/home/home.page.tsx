@@ -1,27 +1,25 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import useReactRouter from 'use-react-router';
 import UserContext from '../../contexts/UserContext';
-import { firestore, signInWithSampleUser } from '../../firebase/firebase.utils';
+import { firestore } from '../../firebase/firebase.utils';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
-import Avatar from '@material-ui/core/Avatar';
+import Fab from '@material-ui/core/Fab';
+import Chat from '@material-ui/icons/Chat';
+import Typography from '@material-ui/core/Typography';
 import Header from '../../components/header/header.component';
-import FloatingActionButton from '../../components/floating-action-button/floating-action-button.component';
 import Tweet from '../../components/tweet/tweet.component';
 import useStyles from './home.styles';
-import FormDialog from '../../components/form-dialog/form-dialog.component';
+import ToggleContent from '../../components/toggle-content/toggle-content.component';
+import Modal from '../../components/modal/modal.component';
 import PostNew from '../../components/post-new/post-new.component';
-import useDialog from '../../hooks/useDialog';
 import Progress from '../../components/progress/progress.component';
 
 const Home = () => {
   const classes = useStyles();
   const { history, match } = useReactRouter();
   const user = useContext(UserContext);
-  const { isShowing, toggle } = useDialog();
-
   const [tweets, setTweets] = useState<
     firebase.firestore.QueryDocumentSnapshot[]
   >([]);
@@ -99,23 +97,6 @@ const Home = () => {
     <>
       <Header />
       <Container maxWidth="sm" className={classes.root}>
-        <Box className={classes.userArea}>
-          {user ? (
-            <div>
-              <Button>
-                <Avatar className={classes.avatar} src={`${user.photoURL}`} />
-                <span>{user.displayName}</span>
-              </Button>
-            </div>
-          ) : (
-            <Button
-              className={classes.loginAndLogoutButton}
-              onClick={signInWithSampleUser}
-            >
-              sign in with sample user
-            </Button>
-          )}
-        </Box>
         <Grid
           container
           justify="center"
@@ -145,18 +126,24 @@ const Home = () => {
           )}
           <Box className={classes.progress}>
             {isMoreFetching && !isCompleteRef.current && <Progress />}
+            {isCompleteRef.current && (
+              <Typography variant="caption">投稿は以上です</Typography>
+            )}
           </Box>
         </Grid>
-        {user && (
-          <>
-            <FloatingActionButton toggle={toggle} />
-            <FormDialog
-              title={'気になることをつぶやいてみよう！'}
-              content={<PostNew toggle={toggle} />}
-              isShowing={isShowing}
-              toggle={toggle}
-            />
-          </>
+        {user.userInfo && (
+          <ToggleContent
+            toggle={show => (
+              <Fab className={classes.fab} onClick={show}>
+                <Chat />
+              </Fab>
+            )}
+            content={hide => (
+              <Modal title="気になることを呟いてみよう！">
+                <PostNew hide={hide} />
+              </Modal>
+            )}
+          />
         )}
       </Container>
     </>

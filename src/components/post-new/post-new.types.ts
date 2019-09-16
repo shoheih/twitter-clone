@@ -1,3 +1,3 @@
 export interface PostNewTypes {
-  toggle: () => void;
+  hide: () => void;
 }

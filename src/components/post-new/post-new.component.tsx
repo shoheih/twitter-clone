@@ -2,12 +2,13 @@ import React, { useState, useEffect, useContext, useRef } from 'react';
 import { firestore, storage } from '../../firebase/firebase.utils';
 import UserContext from '../../contexts/UserContext';
 import TextField from '@material-ui/core/TextField';
+import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import useStyles from './post-new.styles';
 import { PostNewTypes } from './post-new.types';
 import { isEmptyInput } from '../../utils/func';
 
-const PostNew = ({ toggle }: PostNewTypes) => {
+const PostNew = ({ hide }: PostNewTypes) => {
   const classes = useStyles();
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
   const [value, setValue] = useState('');
@@ -20,9 +21,9 @@ const PostNew = ({ toggle }: PostNewTypes) => {
   }, [value]);
 
   const submitImage = async () => {
-    if (!user) return;
+    if (!user.userInfo) return;
     const storageRef = storage.ref('users');
-    const uploadImgName = `${user.id}/${String(Date.now())}.jpeg`;
+    const uploadImgName = `${user.userInfo.id}/${String(Date.now())}.jpeg`;
     const imgRef = storageRef.child(uploadImgName);
     await imgRef.putString(imgData, 'data_url');
     return storageRef.child(uploadImgName).getDownloadURL();
@@ -39,22 +40,22 @@ const PostNew = ({ toggle }: PostNewTypes) => {
         .then(url => {
           return postRef.doc().set({
             body: value,
-            author: { ...user },
+            author: { ...user.userInfo },
             imgUrl: url,
             createdAt: new Date()
           });
         })
         .then(() => {
-          toggle();
+          hide();
           window.location.reload();
         });
     } else {
       await postRef.doc().set({
         body: value,
-        author: { ...user },
+        author: { ...user.userInfo },
         createdAt: new Date()
       });
-      toggle();
+      hide();
       window.location.reload();
     }
   };
@@ -115,15 +116,26 @@ const PostNew = ({ toggle }: PostNewTypes) => {
         onChange={handleChangeFile}
       />
       <canvas ref={canvasRef} width="0" height="0" />
-      <Button
-        className={classes.button}
-        variant="contained"
-        disabled={isSubmitDisabled}
-        color="primary"
-        type="submit"
-      >
-        つぶやく
-      </Button>
+      <Box>
+        <Button
+          className={classes.button}
+          variant="contained"
+          onClick={hide}
+          color="secondary"
+          type="button"
+        >
+          キャンセル
+        </Button>
+        <Button
+          className={classes.button}
+          variant="contained"
+          disabled={isSubmitDisabled}
+          color="primary"
+          type="submit"
+        >
+          つぶやく
+        </Button>
+      </Box>
     </form>
   );
 };

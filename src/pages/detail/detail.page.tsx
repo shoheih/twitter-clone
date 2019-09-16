@@ -7,9 +7,6 @@ import Grid from '@material-ui/core/Grid';
 import Header from '../../components/header/header.component';
 import TweetDetail from '../../components/tweet-detail/tweet-detail.component';
 import useStyles from './detail.styles';
-import FormDialog from '../../components/form-dialog/form-dialog.component';
-import PostDelete from '../../components/post-delete/post-delete.component';
-import useDialog from '../../hooks/useDialog';
 import { DetailTypes } from './detail.types';
 import Progress from '../../components/progress/progress.component';
 import IconButton from '@material-ui/core/IconButton';
@@ -18,7 +15,6 @@ import ArrowBack from '@material-ui/icons/ArrowBack';
 const Detail = ({ match }: DetailTypes) => {
   const classes = useStyles();
   const { history } = useReactRouter();
-  const { isShowing: isDeleteShowing, toggle: deleteToggle } = useDialog();
   const [tweet, setTweet] = useState<
     firebase.firestore.DocumentData | undefined
   >(undefined);
@@ -41,7 +37,7 @@ const Detail = ({ match }: DetailTypes) => {
       <Container maxWidth="sm" className={classes.root}>
         <IconButton
           onClick={() => {
-            history.goBack();
+            history.push('/');
           }}
           aria-label="back"
         >
@@ -59,26 +55,18 @@ const Detail = ({ match }: DetailTypes) => {
           ) : (
             tweet && (
               <TweetDetail
+                id={match.params.id}
                 body={tweet.body}
                 imgUrl={tweet.imgUrl}
                 createdAt={tweet.createdAt.toDate()}
                 authorId={tweet.author.id}
                 authorName={tweet.author.displayName}
                 authorThumbnailURL={tweet.author.photoURL}
-                deleteToggle={deleteToggle}
               />
             )
           )}
         </Grid>
       </Container>
-      {tweet && (
-        <FormDialog
-          title={'つぶやきを削除しますか？'}
-          content={<PostDelete id={match.params.id} imgUrl={tweet.imgUrl} />}
-          isShowing={isDeleteShowing}
-          toggle={deleteToggle}
-        />
-      )}
     </>
   );
 };

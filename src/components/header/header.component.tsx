@@ -1,8 +1,15 @@
 import React, { useState, useContext } from 'react';
 import useReactRouter from 'use-react-router';
-import { auth, signInWithGoogle } from '../../firebase/firebase.utils';
+import {
+  auth,
+  signInWithGoogle,
+  signInWithSampleUser
+} from '../../firebase/firebase.utils';
 import UserContext from '../../contexts/UserContext';
 import useStyles from './header.styles';
+import Button from '@material-ui/core/Button';
+import Box from '@material-ui/core/Box';
+import Avatar from '@material-ui/core/Avatar';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
@@ -16,6 +23,7 @@ import Home from '@material-ui/icons/Home';
 import Mail from '@material-ui/icons/Mail';
 import ExitToApp from '@material-ui/icons/ExitToApp';
 import DarkModeSwitcher from '../dark-mode-switcher/dark-mode-switcher.component';
+import Progress from '../../components/progress/progress.component';
 
 const Header = () => {
   const classes = useStyles();
@@ -23,6 +31,33 @@ const Header = () => {
   const user = useContext(UserContext);
   const [drawer, setDrawer] = useState(false);
   const handleDrawer = () => setDrawer(isOpen => !isOpen);
+
+  const renderLoginUser = () => {
+    if (user.isLoading) {
+      return <Progress />;
+    }
+
+    if (user.userInfo) {
+      return (
+        <Box className={classes.center}>
+          <Avatar
+            className={classes.avatar}
+            src={`${user.userInfo.photoURL}`}
+          />
+          <span>{user.userInfo.displayName}</span>
+        </Box>
+      );
+    } else {
+      return (
+        <Button
+          className={classes.loginAndLogoutButton}
+          onClick={signInWithSampleUser}
+        >
+          匿名ユーザーでログイン
+        </Button>
+      );
+    }
+  };
 
   return (
     <div className={classes.root}>
@@ -36,7 +71,7 @@ const Header = () => {
           >
             <MenuIcon />
           </IconButton>
-          <DarkModeSwitcher />
+          {renderLoginUser()}
         </Toolbar>
       </AppBar>
 
@@ -51,22 +86,34 @@ const Header = () => {
             <ListItemIcon>
               <Home />
             </ListItemIcon>
-            <ListItemText secondary="Home" />
+            <ListItemText secondary="ホーム" />
           </ListItem>
-          <ListItem button onClick={signInWithGoogle}>
-            <ListItemIcon>
-              <Mail />
-            </ListItemIcon>
-            <ListItemText secondary="Sign in with google" />
-          </ListItem>
-          {user ? (
+          {user.userInfo ? (
             <ListItem button onClick={() => auth.signOut()}>
               <ListItemIcon>
                 <ExitToApp />
               </ListItemIcon>
-              <ListItemText secondary="Logout" />
+              <ListItemText secondary="ログアウト" />
             </ListItem>
-          ) : null}
+          ) : (
+            <>
+              <ListItem button onClick={signInWithGoogle}>
+                <ListItemIcon>
+                  <Mail />
+                </ListItemIcon>
+                <ListItemText secondary="Googleアカウントでログイン" />
+              </ListItem>
+              <ListItem button onClick={signInWithSampleUser}>
+                <ListItemIcon>
+                  <Mail />
+                </ListItemIcon>
+                <ListItemText secondary="匿名ユーザーでログイン" />
+              </ListItem>
+            </>
+          )}
+          <ListItem>
+            <DarkModeSwitcher />
+          </ListItem>
         </List>
       </Drawer>
     </div>

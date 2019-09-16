@@ -1,6 +1,8 @@
 import { createContext } from 'react';
-import { UserType } from '../firebase/firebase.types';
+import { DispUserType } from '../firebase/firebase.types';
 
-const UserContext = createContext<UserType>(undefined);
+const UserContext = createContext<DispUserType>({
+  isLoading: true
+});
 
 export default UserContext;

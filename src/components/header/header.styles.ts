@@ -20,6 +20,12 @@ const useStyles = makeStyles(() =>
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center'
+    },
+    avatar: {
+      marginRight: 10
+    },
+    loginAndLogoutButton: {
+      marginLeft: 20
     }
   })
 );

@@ -10,6 +10,9 @@ import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Typography from '@material-ui/core/Typography';
 import useStyles from './tweet-detail.styles';
+import ToggleContent from '../../components/toggle-content/toggle-content.component';
+import Modal from '../../components/modal/modal.component';
+import PostDelete from '../../components/post-delete/post-delete.component';
 import { TweetDetailData } from '../tweet-detail/tweet-detail.types';
 import { getPostingTimeStringAll } from '../../utils/func';
 
@@ -17,23 +20,32 @@ const TweetDetail = (props: TweetDetailData) => {
   const classes = useStyles();
   const user = useContext(UserContext);
   const {
+    id,
     body,
     imgUrl,
     createdAt,
     authorId,
     authorName,
-    authorThumbnailURL,
-    deleteToggle
+    authorThumbnailURL
   } = props;
 
   const renderEditAndDeleteIcon = () => {
-    if (!user) return null;
+    if (!user.userInfo) return null;
 
-    if (user.id === authorId) {
+    if (user.userInfo.id === authorId) {
       return (
-        <IconButton aria-label="delete tweet" onClick={deleteToggle}>
-          <DeleteIcon />
-        </IconButton>
+        <ToggleContent
+          toggle={show => (
+            <IconButton onClick={show}>
+              <DeleteIcon />
+            </IconButton>
+          )}
+          content={hide => (
+            <Modal title="つぶやきを削除しますか">
+              <PostDelete id={id} imgUrl={imgUrl} hide={hide} />
+            </Modal>
+          )}
+        />
       );
     } else {
       return null;

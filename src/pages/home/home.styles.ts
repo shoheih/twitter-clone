@@ -27,6 +27,11 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     loginAndLogoutButton: {
       marginLeft: 20
+    },
+    fab: {
+      position: 'fixed',
+      bottom: '20px',
+      right: '20px'
     }
   })
 );
