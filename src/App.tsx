@@ -13,6 +13,7 @@ import lightTheme from './theme/light';
 import darkTheme from './theme/dark';
 import useInfiniteScroll from './hooks/useInfiniteScroll';
 import useDarkMode from './hooks/useDarkMode';
+import { NotificationProvider } from './hooks/notification';
 
 const App = () => {
   const [user, setUser] = useState<DispUserType>({
@@ -42,19 +43,21 @@ const App = () => {
   }, []);
 
   return (
-    <UserContext.Provider value={user}>
-      <TweetContext.Provider value={tweet}>
-        <ThemeContext.Provider value={theme}>
-          <MuiThemeProvider theme={theme.isDarkMode ? darkTheme : lightTheme}>
-            <CssBaseline />
-            <Switch>
-              <Route exact path="/" component={Home} />
-              <Route exact path="/tweet/:id" component={Detail} />
-            </Switch>
-          </MuiThemeProvider>
-        </ThemeContext.Provider>
-      </TweetContext.Provider>
-    </UserContext.Provider>
+    <ThemeContext.Provider value={theme}>
+      <MuiThemeProvider theme={theme.isDarkMode ? darkTheme : lightTheme}>
+        <NotificationProvider>
+          <UserContext.Provider value={user}>
+            <TweetContext.Provider value={tweet}>
+              <CssBaseline />
+              <Switch>
+                <Route exact path="/" component={Home} />
+                <Route exact path="/tweet/:id" component={Detail} />
+              </Switch>
+            </TweetContext.Provider>
+          </UserContext.Provider>
+        </NotificationProvider>
+      </MuiThemeProvider>
+    </ThemeContext.Provider>
   );
 };
 

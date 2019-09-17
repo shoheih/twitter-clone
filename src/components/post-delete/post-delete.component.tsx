@@ -4,9 +4,13 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import useStyles from './post-delete.styles';
 import { PostDeleteType } from './post-delete.types';
+import useReactRouter from 'use-react-router';
+import { useNotification } from '../../hooks/notification';
 
 const PostDelete = ({ id, imgUrl, hide }: PostDeleteType) => {
   const classes = useStyles();
+  const { history } = useReactRouter();
+  const { show } = useNotification();
 
   const deleteImage = async () => {
     if (!imgUrl) return;
@@ -21,7 +25,8 @@ const PostDelete = ({ id, imgUrl, hide }: PostDeleteType) => {
       .doc(id)
       .delete();
 
-    window.location.href = '/';
+    show('投稿を削除しました');
+    history.push('/');
   };
 
   return (
