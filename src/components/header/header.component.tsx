@@ -1,11 +1,11 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import useReactRouter from 'use-react-router';
 import {
   auth,
   signInWithGoogle,
   signInWithSampleUser
 } from '../../firebase/firebase.utils';
-import UserContext from '../../contexts/UserContext';
+import { useUser } from '../../hooks/user';
 import useStyles from './header.styles';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
@@ -27,8 +27,8 @@ import Progress from '../../components/progress/progress.component';
 
 const Header = () => {
   const classes = useStyles();
+  const user = useUser();
   const { history } = useReactRouter();
-  const user = useContext(UserContext);
   const [drawer, setDrawer] = useState(false);
   const handleDrawer = () => setDrawer(isOpen => !isOpen);
 

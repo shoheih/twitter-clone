@@ -1,12 +1,9 @@
 import React, { useEffect, useContext } from 'react';
 import useReactRouter from 'use-react-router';
-import UserContext from '../../contexts/UserContext';
 import TweetContext from '../../contexts/TweetContext';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
-import Fab from '@material-ui/core/Fab';
-import Chat from '@material-ui/icons/Chat';
 import Typography from '@material-ui/core/Typography';
 import Header from '../../components/header/header.component';
 import Tweet from '../../components/tweet/tweet.component';
@@ -17,7 +14,6 @@ import Progress from '../../components/progress/progress.component';
 const Home = () => {
   const classes = useStyles();
   const { history, match } = useReactRouter();
-  const user = useContext(UserContext);
   const {
     tweets,
     isInitialFetching,
@@ -84,20 +80,6 @@ const Home = () => {
             )}
           </Box>
         </Grid>
-        {/* {user.userInfo && (
-          <ToggleContent
-            toggle={show => (
-              <Fab className={classes.fab} onClick={show}>
-                <Chat />
-              </Fab>
-            )}
-            content={hide => (
-              <Modal title="気になることを呟いてみよう！">
-                <PostNew hide={hide} />
-              </Modal>
-            )}
-          />
-        )} */}
       </Container>
     </>
   );
