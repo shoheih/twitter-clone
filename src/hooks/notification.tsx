@@ -2,7 +2,7 @@ import React, { createContext, useState, useContext } from 'react';
 import Snackbar, { SnackbarOrigin } from '@material-ui/core/Snackbar';
 
 interface Props {
-  show: (message: string) => void;
+  showNotification: (message: string) => void;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-object-literal-type-assertion
@@ -20,7 +20,7 @@ export const NotificationProvider = ({ children }: ProviderProps) => {
     horizontal: 'center'
   };
 
-  const show = (message: string) => {
+  const showNotification = (message: string) => {
     setMessage(message);
     setIsVisible(true);
     setTimeout(() => {
@@ -29,7 +29,7 @@ export const NotificationProvider = ({ children }: ProviderProps) => {
   };
 
   return (
-    <Ctx.Provider value={{ show }}>
+    <Ctx.Provider value={{ showNotification }}>
       {children}
       <Snackbar
         open={isVisible}

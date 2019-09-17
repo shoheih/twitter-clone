@@ -10,7 +10,7 @@ import { useNotification } from '../../hooks/notification';
 const PostDelete = ({ id, imgUrl, hide }: PostDeleteType) => {
   const classes = useStyles();
   const { history } = useReactRouter();
-  const { show } = useNotification();
+  const { showNotification } = useNotification();
 
   const deleteImage = async () => {
     if (!imgUrl) return;
@@ -25,7 +25,7 @@ const PostDelete = ({ id, imgUrl, hide }: PostDeleteType) => {
       .doc(id)
       .delete();
 
-    show('投稿を削除しました');
+    showNotification('投稿を削除しました');
     history.push('/');
   };
 
