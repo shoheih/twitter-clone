@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext, useRef } from 'react';
 import { firestore, storage } from '../../firebase/firebase.utils';
 import { useUser } from '../../hooks/user';
+import { useNotification } from '../../hooks/notification';
 import TweetContext from '../../contexts/TweetContext';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
@@ -10,6 +11,7 @@ import { isEmptyInput } from '../../utils/func';
 const PostNew = () => {
   const classes = useStyles();
   const user = useUser();
+  const { showNotification } = useNotification();
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
   const [value, setValue] = useState('');
   const [imgData, setImageData] = useState('');
@@ -56,6 +58,7 @@ const PostNew = () => {
       });
       batch.commit().then(() => {
         fetchSingleTweet(id);
+        showNotification('投稿しました!');
       });
     }
   };

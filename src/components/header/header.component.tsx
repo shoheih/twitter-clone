@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import useReactRouter from 'use-react-router';
+import { useNotification } from '../../hooks/notification';
 import {
   auth,
   signInWithGoogle,
@@ -28,6 +29,7 @@ import Progress from '../../components/progress/progress.component';
 const Header = () => {
   const classes = useStyles();
   const user = useUser();
+  const { showNotification } = useNotification();
   const { history } = useReactRouter();
   const [drawer, setDrawer] = useState(false);
   const handleDrawer = () => setDrawer(isOpen => !isOpen);
@@ -89,7 +91,13 @@ const Header = () => {
             <ListItemText secondary="ホーム" />
           </ListItem>
           {user.userInfo ? (
-            <ListItem button onClick={() => auth.signOut()}>
+            <ListItem
+              button
+              onClick={() => {
+                auth.signOut();
+                showNotification('ログアウトしました');
+              }}
+            >
               <ListItemIcon>
                 <ExitToApp />
               </ListItemIcon>
