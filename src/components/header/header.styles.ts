@@ -25,7 +25,8 @@ const useStyles = makeStyles(() =>
       marginRight: 10
     },
     loginAndLogoutButton: {
-      marginLeft: 20
+      marginLeft: 20,
+      color: '#fff'
     }
   })
 );

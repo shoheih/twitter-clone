@@ -1,8 +1,8 @@
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useState, useContext, useCallback } from 'react';
 import Snackbar, { SnackbarOrigin } from '@material-ui/core/Snackbar';
 
 interface Props {
-  showNotification: (message: string) => void;
+  showNotification: (message: string) => Promise<void>;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-object-literal-type-assertion
@@ -20,13 +20,13 @@ export const NotificationProvider = ({ children }: ProviderProps) => {
     horizontal: 'center'
   };
 
-  const showNotification = (message: string) => {
+  const showNotification = useCallback(async (message: string) => {
     setMessage(message);
     setIsVisible(true);
     setTimeout(() => {
       setIsVisible(false);
     }, 3000);
-  };
+  }, []);
 
   return (
     <Ctx.Provider value={{ showNotification }}>
