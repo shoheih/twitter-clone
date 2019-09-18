@@ -156,6 +156,7 @@ const PostNew = () => {
         value={value}
         onChange={handleChangeValue}
         name="body"
+        disabled={isSending}
       />
       <input
         ref={inputRef}
