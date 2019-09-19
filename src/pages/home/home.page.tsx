@@ -1,4 +1,5 @@
 import React, { useEffect, useContext } from 'react';
+import { useUser } from '../../hooks/user';
 import useReactRouter from 'use-react-router';
 import TweetContext from '../../contexts/TweetContext';
 import Container from '@material-ui/core/Container';
@@ -13,6 +14,7 @@ import Progress from '../../components/progress/progress.component';
 
 const Home = () => {
   const classes = useStyles();
+  const user = useUser();
   const { history, match } = useReactRouter();
   const {
     tweets,
@@ -48,7 +50,7 @@ const Home = () => {
           direction="column"
           className={classes.grid}
         >
-          <PostNew />
+          {user.userInfo && <PostNew />}
           {isInitialFetching ? (
             <Progress />
           ) : (
