@@ -25,8 +25,7 @@ const PostDelete = ({ id, imgUrl, hide }: PostDeleteType) => {
       .doc(id)
       .delete();
 
-    showNotification('投稿を削除しました');
-    history.push('/');
+    window.location.href = '/';
   };
 
   return (
