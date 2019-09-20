@@ -24,3 +24,8 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 - Jest
 - Enzyme
 
+### `Issue`
+- rewrite test code for new UI
+- rewrite css
+- create custom hook for crud operation ( legacy code now... )
+- introduce global state management library like unstated or redux
