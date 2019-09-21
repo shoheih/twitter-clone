@@ -1,8 +1,3 @@
-export interface TweetData {
-  body: string;
-  imgUrl?: string;
-  createdAt: Date;
-  authorName: string;
-  authorThumbnailURL: string;
-  click: () => void;
-}
+import { TweetData } from '../../hooks/tweet';
+
+export type TweetObject = TweetData & { click: () => void };

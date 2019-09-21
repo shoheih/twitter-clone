@@ -1,43 +1,29 @@
-import React, { useEffect, useContext } from 'react';
+import React from 'react';
+import { Container, Grid, Box, Typography } from '@material-ui/core';
 import { useUser } from '../../hooks/user';
+import { useTweet } from '../../hooks/tweet';
+import useInfiniteScroll from '../../hooks/infiniteScroll';
 import useReactRouter from 'use-react-router';
-import TweetContext from '../../contexts/TweetContext';
-import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
-import Typography from '@material-ui/core/Typography';
+import useStyles from './home.styles';
 import Header from '../../components/header/header.component';
 import Tweet from '../../components/tweet/tweet.component';
-import useStyles from './home.styles';
 import PostNew from '../../components/post-new/post-new.component';
 import Progress from '../../components/progress/progress.component';
 
 const Home = () => {
   const classes = useStyles();
   const user = useUser();
-  const { history, match } = useReactRouter();
   const {
     tweets,
-    isInitialFetching,
-    isMoreFetching,
-    isCompleteRef,
-    fetchInitialTweets,
-    fetchMoreTweets,
-    handleScroll
-  } = useContext(TweetContext);
-
-  useEffect(() => {
-    fetchInitialTweets();
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [fetchInitialTweets, handleScroll]);
-
-  useEffect(() => {
-    if (!isMoreFetching || isCompleteRef.current) {
-      return;
-    }
-    fetchMoreTweets();
-  }, [isMoreFetching, isCompleteRef, fetchMoreTweets]);
+    isAllDataFetched,
+    existLastVisible,
+    fetchTweets
+  } = useTweet();
+  const isFetching = useInfiniteScroll({
+    loadMore: fetchTweets,
+    initialLoad: !existLastVisible
+  });
+  const { history, match } = useReactRouter();
 
   return (
     <>
@@ -51,33 +37,28 @@ const Home = () => {
           className={classes.grid}
         >
           {user.userInfo && <PostNew />}
-          {isInitialFetching ? (
-            <Progress />
-          ) : (
-            tweets.map(tweet => {
-              const data = tweet.data();
-              if (!data) return;
-              return (
-                <Tweet
-                  key={tweet.id}
-                  body={data.body}
-                  imgUrl={data.imgUrl}
-                  createdAt={data.createdAt.toDate()}
-                  authorName={data.author.displayName}
-                  authorThumbnailURL={data.author.photoURL}
-                  click={() => {
-                    history.push({
-                      pathname: `${match.url}tweet/${tweet.id}`,
-                      state: { isFromHome: true }
-                    });
-                  }}
-                />
-              );
-            })
-          )}
+          {tweets.map(tweet => {
+            return (
+              <Tweet
+                key={tweet.id}
+                id={tweet.id}
+                body={tweet.body}
+                imgUrl={tweet.imgUrl}
+                createdAt={tweet.createdAt}
+                authorName={tweet.authorName}
+                authorThumbnailURL={tweet.authorThumbnailURL}
+                click={() => {
+                  history.push({
+                    pathname: `${match.url}tweet/${tweet.id}`,
+                    state: { isFromHome: true }
+                  });
+                }}
+              />
+            );
+          })}
           <Box className={classes.progress}>
-            {isMoreFetching && !isCompleteRef.current && <Progress />}
-            {isCompleteRef.current && (
+            {isFetching && !isAllDataFetched && <Progress />}
+            {isAllDataFetched && (
               <Typography variant="caption">投稿は以上です</Typography>
             )}
           </Box>
