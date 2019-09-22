@@ -37,19 +37,21 @@ const Home = () => {
           className={classes.grid}
         >
           {user.userInfo && <PostNew />}
-          {tweets.map(tweet => {
+          {[...tweets].map(tweet => {
+            const value = tweet[1];
             return (
               <Tweet
-                key={tweet.id}
-                id={tweet.id}
-                body={tweet.body}
-                imgUrl={tweet.imgUrl}
-                createdAt={tweet.createdAt}
-                authorName={tweet.authorName}
-                authorThumbnailURL={tweet.authorThumbnailURL}
+                key={value.id}
+                id={value.id}
+                body={value.body}
+                imgUrl={value.imgUrl}
+                createdAt={value.createdAt}
+                authorId={value.authorId}
+                authorName={value.authorName}
+                authorThumbnailURL={value.authorThumbnailURL}
                 click={() => {
                   history.push({
-                    pathname: `${match.url}tweet/${tweet.id}`,
+                    pathname: `${match.url}tweet/${value.id}`,
                     state: { isFromHome: true }
                   });
                 }}

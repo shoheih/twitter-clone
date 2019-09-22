@@ -12,27 +12,30 @@ export interface TweetData {
   body: string;
   imgUrl?: string;
   createdAt: Date;
+  authorId: string;
   authorName: string;
   authorThumbnailURL: string;
 }
 
+export type TweetDataMap = Map<string, TweetData>;
+
 interface Props {
-  tweets: TweetData[];
+  tweets: TweetDataMap;
   isAllDataFetched: boolean;
   existLastVisible: boolean;
   fetchTweets: () => Promise<void>;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-object-literal-type-assertion
-const Ctx = createContext<Props>({} as Props);
-
 interface ProviderProps {
   children: React.ReactNode;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-object-literal-type-assertion
+const Ctx = createContext<Props>({} as Props);
+
 const TweetProvider = ({ children }: ProviderProps) => {
   const FETCH_LIMIT_NUM = 10;
-  const [tweets, setTweets] = useState<TweetData[]>([]);
+  const [tweets, setTweets] = useState<TweetDataMap>(new Map());
   const isAllDataFetchedRef = useRef<boolean>(false);
   const lastVisibleRef = useRef<firebase.firestore.QueryDocumentSnapshot | null>(
     null
@@ -40,19 +43,22 @@ const TweetProvider = ({ children }: ProviderProps) => {
 
   const getTweetDataObject = (
     QueryDocumentSnapshot: firebase.firestore.QueryDocumentSnapshot[]
-  ) => {
-    return QueryDocumentSnapshot.map(tweet => {
-      const data = tweet.data();
-      const object: TweetData = {
-        id: tweet.id,
-        body: data.body,
-        imgUrl: data.imgUrl,
-        createdAt: data.createdAt.toDate(),
-        authorName: data.author.displayName,
-        authorThumbnailURL: data.author.photoURL
-      };
-      return object;
-    });
+  ): TweetDataMap => {
+    return new Map(
+      QueryDocumentSnapshot.map(tweet => {
+        const data = tweet.data();
+        const object: TweetData = {
+          id: tweet.id,
+          body: data.body,
+          imgUrl: data.imgUrl,
+          createdAt: data.createdAt.toDate(),
+          authorId: data.author.id,
+          authorName: data.author.displayName,
+          authorThumbnailURL: data.author.photoURL
+        };
+        return [tweet.id, object];
+      })
+    );
   };
 
   const fetchTweets = useCallback(async () => {
@@ -76,17 +82,21 @@ const TweetProvider = ({ children }: ProviderProps) => {
       isAllDataFetchedRef.current = true;
       lastVisibleRef.current =
         postsQuerySnapShot.docs[postsQuerySnapShot.docs.length - 1];
-      setTweets(acc => [
-        ...acc,
-        ...getTweetDataObject(postsQuerySnapShot.docs)
-      ]);
+      setTweets(
+        acc => new Map([...acc, ...getTweetDataObject(postsQuerySnapShot.docs)])
+      );
     } else {
       lastVisibleRef.current =
         postsQuerySnapShot.docs[postsQuerySnapShot.docs.length - 2];
-      setTweets(acc => [
-        ...acc,
-        ...getTweetDataObject(postsQuerySnapShot.docs.slice(0, FETCH_LIMIT_NUM))
-      ]);
+      setTweets(
+        acc =>
+          new Map([
+            ...acc,
+            ...getTweetDataObject(
+              postsQuerySnapShot.docs.slice(0, FETCH_LIMIT_NUM)
+            )
+          ])
+      );
     }
   }, []);
 

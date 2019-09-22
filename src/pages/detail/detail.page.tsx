@@ -1,35 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import useReactRouter from 'use-react-router';
-import { firestore } from '../../firebase/firebase.utils';
+import React from 'react';
+import { Container, Grid, IconButton } from '@material-ui/core';
+import { ArrowBack } from '@material-ui/icons';
+import { useTweet } from '../../hooks/tweet';
 import { withRouter } from 'react-router-dom';
-import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
+import { DetailTypes } from './detail.types';
+import useStyles from './detail.styles';
 import Header from '../../components/header/header.component';
 import TweetDetail from '../../components/tweet-detail/tweet-detail.component';
-import useStyles from './detail.styles';
-import { DetailTypes } from './detail.types';
-import Progress from '../../components/progress/progress.component';
-import IconButton from '@material-ui/core/IconButton';
-import ArrowBack from '@material-ui/icons/ArrowBack';
 
-const Detail = ({ match }: DetailTypes) => {
+const Detail = ({ history, match }: DetailTypes) => {
   const classes = useStyles();
-  const { history } = useReactRouter();
-  const [tweet, setTweet] = useState<
-    firebase.firestore.DocumentData | undefined
-  >(undefined);
-  const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    const fetchTweet = async () => {
-      setIsLoading(true);
-      const postsRef = firestore.collection('posts').doc(match.params.id);
-      const postSnapShot = await postsRef.get();
-      setTweet(postSnapShot.data());
-      setIsLoading(false);
-    };
-    fetchTweet();
-  }, [match.params.id]);
+  const { tweets } = useTweet();
+  const tweet = tweets.get(match.params.id);
 
   return (
     <>
@@ -54,20 +36,16 @@ const Detail = ({ match }: DetailTypes) => {
           direction="row"
           className={classes.grid}
         >
-          {isLoading ? (
-            <Progress />
-          ) : (
-            tweet && (
-              <TweetDetail
-                id={match.params.id}
-                body={tweet.body}
-                imgUrl={tweet.imgUrl}
-                createdAt={tweet.createdAt.toDate()}
-                authorId={tweet.author.id}
-                authorName={tweet.author.displayName}
-                authorThumbnailURL={tweet.author.photoURL}
-              />
-            )
+          {tweet && (
+            <TweetDetail
+              id={match.params.id}
+              body={tweet.body}
+              imgUrl={tweet.imgUrl}
+              createdAt={tweet.createdAt}
+              authorId={tweet.authorId}
+              authorName={tweet.authorName}
+              authorThumbnailURL={tweet.authorThumbnailURL}
+            />
           )}
         </Grid>
       </Container>
