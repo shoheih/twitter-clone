@@ -1,197 +1,174 @@
-import React from 'react';
-// import React, { useState, useEffect, useContext, useRef } from 'react';
-// import { firestore, storage } from '../../firebase/firebase.utils';
-// import { useUser } from '../../hooks/user';
-// import { useNotification } from '../../hooks/notification';
-// import TextField from '@material-ui/core/TextField';
-// import Box from '@material-ui/core/Box';
-// import Button from '@material-ui/core/Button';
-// import IconButton from '@material-ui/core/IconButton';
-// import Backspace from '@material-ui/icons/Backspace';
-// import LinearProgress from '@material-ui/core/LinearProgress';
-// import useStyles from './post-new.styles';
-// import { isEmptyInput } from '../../utils/func';
+import React, { useState, useEffect, useRef } from 'react';
+import {
+  TextField,
+  Box,
+  Button,
+  IconButton,
+  LinearProgress
+} from '@material-ui/core';
+import { Backspace } from '@material-ui/icons';
+import useStyles from './post-new.styles';
+import { useUser } from '../../hooks/user';
+import { useTweet, CreateTweetProps } from '../../hooks/tweet';
+import { useNotification } from '../../hooks/notification';
+import { isEmptyInput } from '../../utils/func';
 
 const PostNew = () => {
-  // const classes = useStyles();
-  // const user = useUser();
-  // const inputRef = useRef<HTMLInputElement>(null);
-  // const canvasRef = useRef<HTMLCanvasElement>(null);
-  // const { showNotification } = useNotification();
-  // const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
-  // const [isSending, setIsSending] = useState(false);
-  // const [value, setValue] = useState('');
-  // const [rowImgData, setRowImgData] = useState('');
-  // const [imgData, setImageData] = useState('');
+  const classes = useStyles();
+  const user = useUser();
+  const { createTweet } = useTweet();
+  const { showNotification } = useNotification();
+  const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
+  const [isSending, setIsSending] = useState(false);
+  const [value, setValue] = useState('');
+  const [rowImgData, setRowImgData] = useState('');
+  const [imgData, setImageData] = useState('');
+  const inputRef = useRef<HTMLInputElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  // const clearSelectedFile = () => {
-  //   const input = inputRef.current;
-  //   if (input) {
-  //     input.value = '';
-  //     setRowImgData('');
-  //   }
-  // };
+  const clearSelectedFile = () => {
+    const input = inputRef.current;
+    if (input) {
+      input.value = '';
+      setRowImgData('');
+    }
+  };
 
-  // const resetForm = () => {
-  //   setValue('');
-  //   setRowImgData('');
-  //   setImageData('');
-  //   clearSelectedFile();
-  // };
+  const resetForm = () => {
+    setValue('');
+    setRowImgData('');
+    setImageData('');
+    clearSelectedFile();
+  };
 
-  // const submitImage = async () => {
-  //   if (!user.userInfo) return;
-  //   const storageRef = storage.ref('users');
-  //   const uploadImgName = `${user.userInfo.id}/${String(Date.now())}.jpeg`;
-  //   const imgRef = storageRef.child(uploadImgName);
-  //   await imgRef.putString(imgData, 'data_url');
-  //   return storageRef.child(uploadImgName).getDownloadURL();
-  // };
+  const submitPost = async (
+    event: React.FormEvent<HTMLFormElement>
+  ): Promise<void> => {
+    if (!user.userInfo) return;
+    setIsSubmitDisabled(true);
+    setIsSending(true);
+    event.preventDefault();
 
-  // const submitPost = async (
-  //   event: React.FormEvent<HTMLFormElement>
-  // ): Promise<void> => {
-  //   setIsSubmitDisabled(true);
-  //   setIsSending(true);
-  //   event.preventDefault();
-  //   const postRef = firestore.collection('posts');
-  //   const batch = firestore.batch();
-  //   const id = postRef.doc().id;
-  //   if (imgData) {
-  //     submitImage().then(url => {
-  //       batch.set(postRef.doc(id), {
-  //         body: value,
-  //         author: { ...user.userInfo },
-  //         imgUrl: url,
-  //         createdAt: new Date()
-  //       });
-  //       batch.commit().then(() => {
-  //         fetchSingleTweet(id);
-  //         setIsSending(false);
-  //         resetForm();
-  //         showNotification('画像を投稿しました!');
-  //       });
-  //     });
-  //   } else {
-  //     batch.set(postRef.doc(id), {
-  //       body: value,
-  //       author: { ...user.userInfo },
-  //       createdAt: new Date()
-  //     });
-  //     batch.commit().then(() => {
-  //       fetchSingleTweet(id);
-  //       setIsSending(false);
-  //       resetForm();
-  //       showNotification('文章を投稿しました!');
-  //     });
-  //   }
-  // };
+    const postData: CreateTweetProps = {
+      body: value,
+      author: { ...user.userInfo },
+      createdAt: new Date()
+    };
+    if (imgData) {
+      const imgName = `${user.userInfo.id}/${String(Date.now())}.jpeg`;
+      postData['image'] = { name: imgName, data: imgData };
+    }
 
-  // const setImageToCanvas = (imgpath: string) => {
-  //   const canvas = canvasRef.current;
-  //   if (canvas) {
-  //     const ctx = canvas.getContext('2d');
-  //     const maxW = 450;
-  //     const maxH = 350;
+    createTweet(postData).then(() => {
+      setIsSending(false);
+      resetForm();
+      showNotification('投稿しました!');
+    });
+  };
 
-  //     if (imgpath) {
-  //       let img = new Image();
-  //       img.onload = () => {
-  //         let iw = img.width;
-  //         let ih = img.height;
-  //         let scale = Math.min(maxW / iw, maxH / ih);
-  //         let iwScaled = iw * scale;
-  //         let ihScaled = ih * scale;
-  //         canvas.width = iwScaled;
-  //         canvas.height = ihScaled;
-  //         if (ctx) {
-  //           ctx.drawImage(img, 0, 0, iwScaled, ihScaled);
-  //         }
-  //         const resizeData = canvas.toDataURL('image/jpeg', 0.5);
-  //         setImageData(resizeData);
-  //       };
-  //       img.src = imgpath;
-  //     } else {
-  //       if (ctx) {
-  //         ctx.clearRect(0, 0, maxW, maxH);
-  //         canvas.width = 0;
-  //         canvas.height = 0;
-  //         setImageData('');
-  //       }
-  //     }
-  //   }
-  // };
+  const setImageToCanvas = (imgpath: string) => {
+    const canvas = canvasRef.current;
+    if (canvas) {
+      const ctx = canvas.getContext('2d');
+      const maxW = 450;
+      const maxH = 350;
 
-  // const handleChangeValue = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   const target = event.target as HTMLInputElement;
-  //   setValue(target.value);
-  // };
+      if (imgpath) {
+        let img = new Image();
+        img.onload = () => {
+          let iw = img.width;
+          let ih = img.height;
+          let scale = Math.min(maxW / iw, maxH / ih);
+          let iwScaled = iw * scale;
+          let ihScaled = ih * scale;
+          canvas.width = iwScaled;
+          canvas.height = ihScaled;
+          if (ctx) {
+            ctx.drawImage(img, 0, 0, iwScaled, ihScaled);
+          }
+          const resizeData = canvas.toDataURL('image/jpeg', 0.5);
+          setImageData(resizeData);
+        };
+        img.src = imgpath;
+      } else {
+        if (ctx) {
+          ctx.clearRect(0, 0, maxW, maxH);
+          canvas.width = 0;
+          canvas.height = 0;
+          setImageData('');
+        }
+      }
+    }
+  };
 
-  // const handleChangeFile = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   const target = event.target as HTMLInputElement;
-  //   if (target.files && target.files.length) {
-  //     setRowImgData(URL.createObjectURL(target.files[0]));
-  //   } else {
-  //     setRowImgData('');
-  //   }
-  // };
+  const handleChangeValue = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const target = event.target as HTMLInputElement;
+    setValue(target.value);
+  };
 
-  // useEffect(() => {
-  //   setIsSubmitDisabled(isEmptyInput(value) && isEmptyInput(imgData));
-  // }, [value, imgData]);
+  const handleChangeFile = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const target = event.target as HTMLInputElement;
+    if (target.files && target.files.length) {
+      setRowImgData(URL.createObjectURL(target.files[0]));
+    } else {
+      setRowImgData('');
+    }
+  };
 
-  // useEffect(() => {
-  //   setImageToCanvas(rowImgData);
-  // }, [rowImgData]);
+  useEffect(() => {
+    setIsSubmitDisabled(isEmptyInput(value) && isEmptyInput(imgData));
+  }, [value, imgData]);
 
-  // return (
-  //   <form className={classes.form} onSubmit={submitPost}>
-  //     {isSending && <LinearProgress className={classes.progressBar} />}
-  //     <TextField
-  //       placeholder="自由につぶやいてみましょう！"
-  //       multiline
-  //       margin="normal"
-  //       fullWidth
-  //       value={value}
-  //       onChange={handleChangeValue}
-  //       name="body"
-  //       disabled={isSending}
-  //     />
-  //     <input
-  //       ref={inputRef}
-  //       accept="image/*"
-  //       type="file"
-  //       name="image"
-  //       onChange={handleChangeFile}
-  //     />
-  //     {!isSending && (
-  //       <Box className={classes.dispImg}>
-  //         <canvas
-  //           ref={canvasRef}
-  //           className={classes.canvas}
-  //           width="0"
-  //           height="0"
-  //         />
-  //         {imgData && (
-  //           <IconButton onClick={clearSelectedFile}>
-  //             <Backspace />
-  //           </IconButton>
-  //         )}
-  //       </Box>
-  //     )}
-  //     <Button
-  //       className={classes.button}
-  //       variant="contained"
-  //       disabled={isSubmitDisabled}
-  //       color="primary"
-  //       type="submit"
-  //     >
-  //       つぶやく
-  //     </Button>
-  //   </form>
-  // );
+  useEffect(() => {
+    setImageToCanvas(rowImgData);
+  }, [rowImgData]);
 
-  return <div>hi</div>;
+  return (
+    <form className={classes.form} onSubmit={submitPost}>
+      {isSending && <LinearProgress className={classes.progressBar} />}
+      <TextField
+        placeholder="自由につぶやいてみましょう！"
+        multiline
+        margin="normal"
+        fullWidth
+        value={value}
+        onChange={handleChangeValue}
+        name="body"
+        disabled={isSending}
+      />
+      <input
+        ref={inputRef}
+        accept="image/*"
+        type="file"
+        name="image"
+        onChange={handleChangeFile}
+      />
+      {!isSending && (
+        <Box className={classes.dispImg}>
+          <canvas
+            ref={canvasRef}
+            className={classes.canvas}
+            width="0"
+            height="0"
+          />
+          {imgData && (
+            <IconButton onClick={clearSelectedFile}>
+              <Backspace />
+            </IconButton>
+          )}
+        </Box>
+      )}
+      <Button
+        className={classes.button}
+        variant="contained"
+        disabled={isSubmitDisabled}
+        color="primary"
+        type="submit"
+      >
+        つぶやく
+      </Button>
+    </form>
+  );
 };
 
 export default PostNew;

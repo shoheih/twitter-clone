@@ -1,31 +1,27 @@
 import React from 'react';
-import { firestore, storage } from '../../firebase/firebase.utils';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
+import { Button, Typography } from '@material-ui/core';
 import useStyles from './post-delete.styles';
-import { PostDeleteType } from './post-delete.types';
 import useReactRouter from 'use-react-router';
+import { useTweet } from '../../hooks/tweet';
 import { useNotification } from '../../hooks/notification';
+import { PostDeleteType } from './post-delete.types';
 
 const PostDelete = ({ id, imgUrl, hide }: PostDeleteType) => {
   const classes = useStyles();
+  const { deleteTweet } = useTweet();
   const { history } = useReactRouter();
   const { showNotification } = useNotification();
 
-  const deleteImage = async () => {
-    if (!imgUrl) return;
-    const storageRef = storage.refFromURL(imgUrl);
-    return storageRef.delete();
-  };
-
-  const handleDelete = async () => {
-    await deleteImage();
-    await firestore
-      .collection('posts')
-      .doc(id)
-      .delete();
-
-    window.location.href = '/';
+  const handleDelete = () => {
+    deleteTweet(id, imgUrl).then(() => {
+      hide();
+      if (history.location.state && history.location.state.isFromHome) {
+        history.goBack();
+      } else {
+        history.push('/');
+      }
+      showNotification('投稿を削除しました');
+    });
   };
 
   return (

@@ -1,5 +1,4 @@
 import React from 'react';
-import useStyles from './tweet.styles';
 import {
   Card,
   CardHeader,
@@ -9,6 +8,7 @@ import {
   Avatar,
   Typography
 } from '@material-ui/core';
+import useStyles from './tweet.styles';
 import { TweetObject } from './tweet.types';
 import { getPostingTimeString } from '../../utils/func';
 
