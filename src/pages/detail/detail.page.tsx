@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, Grid, IconButton } from '@material-ui/core';
 import { ArrowBack } from '@material-ui/icons';
 import { useTweet } from '../../hooks/tweet';
@@ -11,6 +11,8 @@ import TweetDetail from '../../components/tweet-detail/tweet-detail.component';
 const Detail = ({ history, match }: DetailTypes) => {
   const classes = useStyles();
   const { tweets } = useTweet();
+  const isFromHome =
+    history.location.state && history.location.state.isFromHome;
   const tweet = tweets.get(match.params.id);
 
   return (
@@ -19,7 +21,7 @@ const Detail = ({ history, match }: DetailTypes) => {
       <Container maxWidth="sm" className={classes.root}>
         <IconButton
           onClick={() => {
-            if (history.location.state && history.location.state.isFromHome) {
+            if (isFromHome) {
               history.goBack();
             } else {
               history.push('/');
