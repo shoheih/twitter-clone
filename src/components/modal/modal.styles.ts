@@ -1,9 +1,12 @@
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import { createStyles, makeStyles } from '@material-ui/core';
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles(() =>
   createStyles({
-    root: {
-      width: '100%'
+    button: {
+      width: '50px',
+      position: 'fixed',
+      top: '10px',
+      left: '10px'
     }
   })
 );
