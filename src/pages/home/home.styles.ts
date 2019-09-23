@@ -30,8 +30,9 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     fab: {
       position: 'fixed',
-      bottom: '20px',
-      right: '20px'
+      bottom: '50px',
+      right: '30px',
+      zIndex: 100
     }
   })
 );

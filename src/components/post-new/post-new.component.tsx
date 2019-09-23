@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
+  Avatar,
   TextField,
   Box,
   Button,
@@ -11,9 +12,10 @@ import useStyles from './post-new.styles';
 import { useUser } from '../../hooks/user';
 import { useTweet, CreateTweetProps } from '../../hooks/tweet';
 import { useNotification } from '../../hooks/notification';
+import { PostNewType } from './post-new.types';
 import { isEmptyInput } from '../../utils/func';
 
-const PostNew = () => {
+const PostNew = ({ hide }: PostNewType) => {
   const classes = useStyles();
   const user = useUser();
   const { createTweet } = useTweet();
@@ -62,6 +64,7 @@ const PostNew = () => {
     createTweet(postData).then(() => {
       setIsSending(false);
       resetForm();
+      if (hide) hide();
       showNotification('投稿しました!');
     });
   };
@@ -126,16 +129,21 @@ const PostNew = () => {
   return (
     <form className={classes.form} onSubmit={submitPost}>
       {isSending && <LinearProgress className={classes.progressBar} />}
-      <TextField
-        placeholder="自由につぶやいてみましょう！"
-        multiline
-        margin="normal"
-        fullWidth
-        value={value}
-        onChange={handleChangeValue}
-        name="body"
-        disabled={isSending}
-      />
+      <Box className={classes.textBox}>
+        <Avatar
+          className={classes.avatar}
+          src={user && user.userInfo && user.userInfo.photoURL}
+        />
+        <TextField
+          placeholder="自由につぶやいてみましょう！"
+          multiline
+          fullWidth
+          value={value}
+          onChange={handleChangeValue}
+          name="body"
+          disabled={isSending}
+        />
+      </Box>
       <input
         ref={inputRef}
         accept="image/*"

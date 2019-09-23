@@ -1,5 +1,6 @@
 import React from 'react';
-import { Container, Grid, Box, Typography } from '@material-ui/core';
+import { Container, Grid, Box, Fab, Typography } from '@material-ui/core';
+import { ChatBubble } from '@material-ui/icons';
 import { useUser } from '../../hooks/user';
 import { useTweet } from '../../hooks/tweet';
 import useInfiniteScroll from '../../hooks/infiniteScroll';
@@ -7,6 +8,8 @@ import useReactRouter from 'use-react-router';
 import useStyles from './home.styles';
 import Header from '../../components/header/header.component';
 import Tweet from '../../components/tweet/tweet.component';
+import ToggleContent from '../../components/toggle-content/toggle-content.component';
+import Modal from '../../components/modal/modal.component';
 import PostNew from '../../components/post-new/post-new.component';
 import Progress from '../../components/progress/progress.component';
 
@@ -37,6 +40,25 @@ const Home = () => {
           className={classes.grid}
         >
           {user.userInfo && <PostNew />}
+          {user.userInfo && (
+            <ToggleContent
+              toggle={show => (
+                <Fab
+                  color="secondary"
+                  aria-label="add"
+                  className={classes.fab}
+                  onClick={show}
+                >
+                  <ChatBubble />
+                </Fab>
+              )}
+              content={hide => (
+                <Modal title="" hide={hide}>
+                  <PostNew hide={hide} />
+                </Modal>
+              )}
+            />
+          )}
           {[...tweets].map(tweet => {
             const value = tweet[1];
             return (

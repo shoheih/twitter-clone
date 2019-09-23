@@ -9,6 +9,17 @@ const useStyles = makeStyles((theme: Theme) =>
       alignItems: 'center',
       marginBottom: '50px'
     },
+    textBox: {
+      width: '100%',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'start',
+      padding: theme.spacing(2)
+    },
+    avatar: {
+      backgroundColor: theme.palette.secondary.main,
+      marginRight: theme.spacing(2)
+    },
     button: {
       marginTop: theme.spacing(1)
     },

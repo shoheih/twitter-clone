@@ -41,7 +41,7 @@ const TweetDetail = (props: TweetDetailData) => {
             </IconButton>
           )}
           content={hide => (
-            <Modal title="つぶやきを削除しますか">
+            <Modal title="つぶやきを削除しますか？" hide={hide}>
               <PostDelete id={id} imgUrl={imgUrl} hide={hide} />
             </Modal>
           )}
