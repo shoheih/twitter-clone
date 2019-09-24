@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Grid, IconButton } from '@material-ui/core';
 import { ArrowBack } from '@material-ui/icons';
-import { useTweet } from '../../hooks/tweet';
+import { useTweet, TweetData } from '../../hooks/tweet';
 import { withRouter } from 'react-router-dom';
 import { DetailTypes } from './detail.types';
 import useStyles from './detail.styles';
@@ -10,10 +10,20 @@ import TweetDetail from '../../components/tweet-detail/tweet-detail.component';
 
 const Detail = ({ history, match }: DetailTypes) => {
   const classes = useStyles();
-  const { tweets } = useTweet();
+  const { tweets, fetchTweetDirectly } = useTweet();
+  const [tweet, setTweet] = useState<TweetData | undefined>(undefined);
   const isFromHome =
     history.location.state && history.location.state.isFromHome;
-  const tweet = tweets.get(match.params.id);
+
+  useEffect(() => {
+    if (isFromHome) {
+      setTweet(tweets.get(match.params.id));
+    } else {
+      fetchTweetDirectly(match.params.id).then(tweet => {
+        setTweet(tweet);
+      });
+    }
+  }, [match, fetchTweetDirectly, isFromHome, tweets]);
 
   return (
     <>

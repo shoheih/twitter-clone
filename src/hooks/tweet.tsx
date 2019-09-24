@@ -25,6 +25,7 @@ interface ContextProps {
   isAllDataFetched: boolean;
   existLastVisible: boolean;
   fetchTweets: () => Promise<void>;
+  fetchTweetDirectly: (id: string) => Promise<TweetData | undefined>;
   createTweet: (tweet: CreateTweetProps) => Promise<void>;
   deleteTweet: (id: string, imgUrl?: string | undefined) => Promise<void>;
 }
@@ -136,6 +137,28 @@ const TweetProvider = ({ children }: ProviderProps) => {
     }
   };
 
+  const fetchTweetDirectly = async (id: string) => {
+    const documentSnapShot = await firestore
+      .collection('posts')
+      .doc(id)
+      .get();
+
+    const data = documentSnapShot.data();
+    if (data) {
+      const object: TweetData = {
+        id: documentSnapShot.id,
+        body: data.body,
+        imgUrl: data.imgUrl,
+        createdAt: data.createdAt.toDate(),
+        authorId: data.author.id,
+        authorName: data.author.displayName,
+        authorThumbnailURL: data.author.photoURL
+      };
+
+      return object;
+    }
+  };
+
   const submitImage = async (imgName: string, imgData: string) => {
     const storageRef = storage.ref('users');
     const imgRef = storageRef.child(imgName);
@@ -198,6 +221,7 @@ const TweetProvider = ({ children }: ProviderProps) => {
         isAllDataFetched: isAllDataFetchedRef.current,
         existLastVisible: lastVisibleRef.current ? true : false,
         fetchTweets,
+        fetchTweetDirectly,
         createTweet,
         deleteTweet
       }}
