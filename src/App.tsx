@@ -1,6 +1,7 @@
 import React from 'react';
 import { CssBaseline } from '@material-ui/core';
 import { Switch, Route } from 'react-router-dom';
+import Header from './components/header/header.component';
 import Home from './pages/home/home.page';
 import Detail from './pages/detail/detail.page';
 import { TweetProvider } from './hooks/tweet';
@@ -15,6 +16,7 @@ const App = () => {
         <UserProvider>
           <TweetProvider>
             <CssBaseline />
+            <Header />
             <Switch>
               <Route exact path="/" component={Home} />
               <Route exact path="/tweet/:id" component={Detail} />

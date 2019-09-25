@@ -6,7 +6,6 @@ import { useTweet } from '../../hooks/tweet';
 import useInfiniteScroll from '../../hooks/infiniteScroll';
 import useReactRouter from 'use-react-router';
 import useStyles from './home.styles';
-import Header from '../../components/header/header.component';
 import Tweet from '../../components/tweet/tweet.component';
 import ToggleContent from '../../components/toggle-content/toggle-content.component';
 import Modal from '../../components/modal/modal.component';
@@ -30,7 +29,6 @@ const Home = () => {
 
   return (
     <>
-      <Header />
       <Container maxWidth="sm" className={classes.root}>
         <Grid
           container
