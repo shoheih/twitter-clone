@@ -7,7 +7,7 @@ import {
   IconButton,
   LinearProgress
 } from '@material-ui/core';
-import { Backspace } from '@material-ui/icons';
+import { Backspace, InsertPhoto } from '@material-ui/icons';
 import useStyles from './post-new.styles';
 import { useUser } from '../../hooks/user';
 import { useTweet, CreateTweetProps } from '../../hooks/tweet';
@@ -129,7 +129,7 @@ const PostNew = ({ hide }: PostNewType) => {
   return (
     <form className={classes.form} onSubmit={submitPost}>
       {isSending && <LinearProgress className={classes.progressBar} />}
-      <Box className={classes.textBox}>
+      <Box className={classes.inputBox}>
         <Avatar
           className={classes.avatar}
           src={user && user.userInfo && user.userInfo.photoURL}
@@ -144,13 +144,6 @@ const PostNew = ({ hide }: PostNewType) => {
           disabled={isSending}
         />
       </Box>
-      <input
-        ref={inputRef}
-        accept="image/*"
-        type="file"
-        name="image"
-        onChange={handleChangeFile}
-      />
       {!isSending && (
         <Box className={classes.dispImg}>
           <canvas
@@ -166,15 +159,30 @@ const PostNew = ({ hide }: PostNewType) => {
           )}
         </Box>
       )}
-      <Button
-        className={classes.button}
-        variant="contained"
-        disabled={isSubmitDisabled}
-        color="primary"
-        type="submit"
-      >
-        つぶやく
-      </Button>
+      <Box className={classes.buttonBox}>
+        <input
+          ref={inputRef}
+          accept="image/*"
+          type="file"
+          name="image"
+          onChange={handleChangeFile}
+          id="photo-files"
+          style={{ display: 'none' }}
+        />
+        <label htmlFor="photo-files">
+          <IconButton component="span">
+            <InsertPhoto />
+          </IconButton>
+        </label>
+        <Button
+          variant="contained"
+          disabled={isSubmitDisabled}
+          color="primary"
+          type="submit"
+        >
+          つぶやく
+        </Button>
+      </Box>
     </form>
   );
 };

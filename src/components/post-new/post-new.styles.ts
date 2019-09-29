@@ -4,36 +4,49 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     form: {
       width: '100%',
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      marginBottom: '50px'
+      paddingTop: theme.spacing(2),
+      paddingLeft: theme.spacing(2),
+      paddingRight: theme.spacing(2),
+      marginBottom: theme.spacing(5),
+      position: 'relative'
     },
-    textBox: {
+    progressBar: {
+      width: '100%',
+      position: 'absolute',
+      top: 0,
+      left: 0
+    },
+    inputBox: {
       width: '100%',
       display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'start',
-      padding: theme.spacing(2)
+      justifyContent: 'space-between',
+      alignItems: 'flex-start',
+      position: 'relative'
+    },
+    avatarBox: {
+      paddingTop: theme.spacing(2),
+      paddingLeft: theme.spacing(2),
+      paddingRight: theme.spacing(2)
     },
     avatar: {
-      backgroundColor: theme.palette.secondary.main,
-      marginRight: theme.spacing(2)
-    },
-    button: {
-      marginTop: theme.spacing(1)
+      marginRight: theme.spacing(2),
+      backgroundColor: theme.palette.secondary.main
     },
     canvas: {
       maxWidth: '100%'
     },
     dispImg: {
+      width: '100%',
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
-      marginTop: '30px'
+      marginTop: '10px'
     },
-    progressBar: {
-      width: '100%'
+    buttonBox: {
+      width: '100%',
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center'
     }
   })
 );
