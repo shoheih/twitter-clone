@@ -25,7 +25,7 @@ interface ContextProps {
   isAllDataFetched: boolean;
   existLastVisible: boolean;
   fetchTweets: () => Promise<void>;
-  fetchTweetDirectly: (id: string) => Promise<TweetData | undefined>;
+  fetchTweet: (id: string) => Promise<void>;
   createTweet: (tweet: CreateTweetProps) => Promise<void>;
   deleteTweet: (id: string, imgUrl?: string | undefined) => Promise<void>;
 }
@@ -79,6 +79,7 @@ const TweetProvider = ({ children }: ProviderProps) => {
 
   const fetchTweets = useCallback(async () => {
     if (isAllDataFetchedRef.current) return;
+    if (!lastVisibleRef.current) setTweets(new Map());
 
     const orderByQuery = firestore
       .collection('posts')
@@ -116,28 +117,7 @@ const TweetProvider = ({ children }: ProviderProps) => {
     }
   }, []);
 
-  const fetchTweet = async (id: string) => {
-    const documentSnapShot = await firestore
-      .collection('posts')
-      .doc(id)
-      .get();
-
-    const data = documentSnapShot.data();
-    if (data) {
-      const object: TweetData = {
-        id: documentSnapShot.id,
-        body: data.body,
-        imgUrl: data.imgUrl,
-        createdAt: data.createdAt.toDate(),
-        authorId: data.author.id,
-        authorName: data.author.displayName,
-        authorThumbnailURL: data.author.photoURL
-      };
-      setTweets(acc => new Map([[documentSnapShot.id, object], ...acc]));
-    }
-  };
-
-  const fetchTweetDirectly = async (id: string) => {
+  const fetchTweet = useCallback(async (id: string) => {
     const documentSnapShot = await firestore
       .collection('posts')
       .doc(id)
@@ -155,9 +135,13 @@ const TweetProvider = ({ children }: ProviderProps) => {
         authorThumbnailURL: data.author.photoURL
       };
 
-      return object;
+      setTweets(acc =>
+        acc.has(id)
+          ? new Map([...acc, [documentSnapShot.id, object]])
+          : new Map([[documentSnapShot.id, object], ...acc])
+      );
     }
-  };
+  }, []);
 
   const submitImage = async (imgName: string, imgData: string) => {
     const storageRef = storage.ref('users');
@@ -221,7 +205,7 @@ const TweetProvider = ({ children }: ProviderProps) => {
         isAllDataFetched: isAllDataFetchedRef.current,
         existLastVisible: lastVisibleRef.current ? true : false,
         fetchTweets,
-        fetchTweetDirectly,
+        fetchTweet,
         createTweet,
         deleteTweet
       }}

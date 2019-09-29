@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Container, Grid, IconButton } from '@material-ui/core';
 import { ArrowBack } from '@material-ui/icons';
 import { useTweet, TweetData } from '../../hooks/tweet';
@@ -10,7 +10,8 @@ import Progress from '../../components/progress/progress.component';
 
 const Detail = ({ history, match }: DetailTypes) => {
   const classes = useStyles();
-  const { tweets, fetchTweetDirectly } = useTweet();
+  const idRef = useRef<string>(match.params.id);
+  const { tweets, fetchTweet } = useTweet();
   const [tweet, setTweet] = useState<TweetData | undefined>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const isFromHome =
@@ -18,11 +19,14 @@ const Detail = ({ history, match }: DetailTypes) => {
 
   useEffect(() => {
     setIsLoading(true);
-    fetchTweetDirectly(match.params.id).then(tweet => {
-      setTweet(tweet);
+    fetchTweet(idRef.current).then(() => {
       setIsLoading(false);
     });
-  }, [match, fetchTweetDirectly, isFromHome, tweets]);
+  }, [fetchTweet]);
+
+  useEffect(() => {
+    setTweet(tweets.get(idRef.current));
+  }, [tweets]);
 
   return (
     <>
