@@ -5,7 +5,7 @@ import { ModalProps } from './modal.types';
 const Modal = ({ children, title, hide }: ModalProps) => {
   return (
     <Dialog fullWidth={true} maxWidth={'sm'} open={true} onClose={hide}>
-      <DialogTitle>{title}</DialogTitle>
+      <DialogTitle style={{ textAlign: 'center' }}>{title}</DialogTitle>
       <DialogContent>{children}</DialogContent>
     </Dialog>
   );

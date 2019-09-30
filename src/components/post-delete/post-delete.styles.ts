@@ -8,6 +8,7 @@ const useStyles = makeStyles((theme: Theme) =>
       alignItems: 'center'
     },
     button: {
+      color: '#fff',
       marginTop: theme.spacing(1)
     }
   })

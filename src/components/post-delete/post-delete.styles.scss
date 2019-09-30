@@ -1,0 +1,9 @@
+.rowButtons {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+
+  > *:nth-child(n+2) {
+    margin-left: 20px;
+  }
+}

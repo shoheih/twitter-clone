@@ -1,10 +1,11 @@
 import React from 'react';
-import { Button, Typography } from '@material-ui/core';
+import { Button, Box, Typography } from '@material-ui/core';
 import useStyles from './post-delete.styles';
 import useReactRouter from 'use-react-router';
 import { useTweet } from '../../hooks/tweet';
 import { useNotification } from '../../hooks/notification';
 import { PostDeleteType } from './post-delete.types';
+import './post-delete.styles.scss';
 
 const PostDelete = ({ id, imgUrl, hide }: PostDeleteType) => {
   const classes = useStyles();
@@ -29,24 +30,26 @@ const PostDelete = ({ id, imgUrl, hide }: PostDeleteType) => {
       <Typography variant="body2" component="p" color="secondary">
         ※削除したつぶやきは元に戻せません
       </Typography>
-      <Button
-        className={classes.button}
-        variant="contained"
-        onClick={hide}
-        color="secondary"
-        type="button"
-      >
-        キャンセル
-      </Button>
-      <Button
-        className={classes.button}
-        variant="contained"
-        disabled={false}
-        color="secondary"
-        onClick={handleDelete}
-      >
-        削除する
-      </Button>
+      <Box className="rowButtons">
+        <Button
+          className={classes.button}
+          variant="contained"
+          onClick={hide}
+          color="primary"
+          type="button"
+        >
+          キャンセル
+        </Button>
+        <Button
+          className={classes.button}
+          variant="contained"
+          disabled={false}
+          color="secondary"
+          onClick={handleDelete}
+        >
+          削除する
+        </Button>
+      </Box>
     </div>
   );
 };
