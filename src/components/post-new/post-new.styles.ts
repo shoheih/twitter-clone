@@ -45,8 +45,15 @@ const useStyles = makeStyles((theme: Theme) =>
     buttonBox: {
       width: '100%',
       display: 'flex',
-      justifyContent: 'space-between',
+      justifyContent: 'flex-end',
       alignItems: 'center'
+    },
+    label: {
+      marginRight: theme.spacing(1)
+    },
+    icon: {
+      width: '30px',
+      height: '30px'
     }
   })
 );

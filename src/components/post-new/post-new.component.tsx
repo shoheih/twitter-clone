@@ -169,9 +169,9 @@ const PostNew = ({ hide }: PostNewType) => {
           id="photo-files"
           style={{ display: 'none' }}
         />
-        <label htmlFor="photo-files">
+        <label htmlFor="photo-files" className={classes.label}>
           <IconButton component="span">
-            <InsertPhoto />
+            <InsertPhoto className={classes.icon} />
           </IconButton>
         </label>
         <Button
