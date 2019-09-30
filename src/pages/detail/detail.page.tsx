@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Container, Grid, IconButton } from '@material-ui/core';
+import { Container, Grid, IconButton, Typography } from '@material-ui/core';
 import { ArrowBack } from '@material-ui/icons';
-import { useTweet, TweetData } from '../../hooks/tweet';
+import { useTweet } from '../../hooks/tweet';
 import { withRouter } from 'react-router-dom';
 import { DetailTypes } from './detail.types';
 import useStyles from './detail.styles';
@@ -12,7 +12,6 @@ const Detail = ({ history, match }: DetailTypes) => {
   const classes = useStyles();
   const idRef = useRef<string>(match.params.id);
   const { tweets, fetchTweet } = useTweet();
-  const [tweet, setTweet] = useState<TweetData | undefined>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const isFromHome =
     history.location.state && history.location.state.isFromHome;
@@ -24,9 +23,31 @@ const Detail = ({ history, match }: DetailTypes) => {
     });
   }, [fetchTweet]);
 
-  useEffect(() => {
-    setTweet(tweets.get(idRef.current));
-  }, [tweets]);
+  const renderTweet = (isLoading: boolean) => {
+    if (isLoading) return <Progress />;
+
+    const tweet = tweets.get(idRef.current);
+    if (!tweet)
+      return (
+        <Typography variant="body2" component="p">
+          つぶやきは存在しません。
+          <br />
+          既に削除された可能性があります。
+        </Typography>
+      );
+
+    return (
+      <TweetDetail
+        id={match.params.id}
+        body={tweet.body}
+        imgUrl={tweet.imgUrl}
+        createdAt={tweet.createdAt}
+        authorId={tweet.authorId}
+        authorName={tweet.authorName}
+        authorThumbnailURL={tweet.authorThumbnailURL}
+      />
+    );
+  };
 
   return (
     <>
@@ -50,18 +71,7 @@ const Detail = ({ history, match }: DetailTypes) => {
           direction="row"
           className={classes.grid}
         >
-          {isLoading && <Progress />}
-          {tweet && (
-            <TweetDetail
-              id={match.params.id}
-              body={tweet.body}
-              imgUrl={tweet.imgUrl}
-              createdAt={tweet.createdAt}
-              authorId={tweet.authorId}
-              authorName={tweet.authorName}
-              authorThumbnailURL={tweet.authorThumbnailURL}
-            />
-          )}
+          {renderTweet(isLoading)}
         </Grid>
       </Container>
     </>
