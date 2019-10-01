@@ -7,7 +7,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 #### Languages and Framework
 - React.js
 - TypeScript
-- material-ui
+- material-ui (+ SCSS)
 
 #### Service
 - Firebase
@@ -26,6 +26,6 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ### `Issue`
 - rewrite test code for new UI
-- rewrite css
+- rewrite css (+ SCSS)
 - create custom hook for crud operation ( legacy code now... )
 - introduce global state management library like unstated or redux
