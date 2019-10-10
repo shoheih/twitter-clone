@@ -1,27 +1,27 @@
 import React, { useState } from 'react';
 import useReactRouter from 'use-react-router';
+import { useUser } from '../../hooks/user';
+import useStyles from './header.styles';
 import {
   auth,
   signInWithGoogle,
   signInWithSampleUser
 } from '../../firebase/firebase.utils';
-import { useUser } from '../../hooks/user';
-import useStyles from './header.styles';
-import Button from '@material-ui/core/Button';
-import Box from '@material-ui/core/Box';
-import Avatar from '@material-ui/core/Avatar';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
+import {
+  Button,
+  Box,
+  Avatar,
+  AppBar,
+  Toolbar,
+  IconButton,
+  Drawer,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText
+} from '@material-ui/core';
+import { Home, Mail, ExitToApp } from '@material-ui/icons';
 import MenuIcon from '@material-ui/icons/Menu';
-import Drawer from '@material-ui/core/Drawer';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import Home from '@material-ui/icons/Home';
-import Mail from '@material-ui/icons/Mail';
-import ExitToApp from '@material-ui/icons/ExitToApp';
 import DarkModeSwitcher from '../dark-mode-switcher/dark-mode-switcher.component';
 import Progress from '../../components/progress/progress.component';
 
