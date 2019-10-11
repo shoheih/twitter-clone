@@ -26,6 +26,6 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ### `Issue`
 - rewrite test code for new UI
-- rewrite css (+ SCSS)
+- rewrite css by Styled Component
 - create custom hook for crud operation ( legacy code now... )
 - introduce global state management library like unstated or redux
