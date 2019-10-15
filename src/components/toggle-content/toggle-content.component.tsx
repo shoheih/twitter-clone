@@ -8,7 +8,7 @@ const ToggleContent = ({ toggle, content }: ToggleContentProps) => {
 
   return (
     <>
-      {toggle(show)}
+      {toggle(show, hide)}
       {isShown && content(hide)}
     </>
   );

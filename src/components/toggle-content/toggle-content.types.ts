@@ -1,4 +1,4 @@
 export interface ToggleContentProps {
-  toggle: (func: () => void) => JSX.Element;
+  toggle: (showFunc: () => void, hideFunc: () => void) => JSX.Element;
   content: (func: () => void) => JSX.Element;
 }
