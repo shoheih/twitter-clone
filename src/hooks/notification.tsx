@@ -1,4 +1,10 @@
-import React, { createContext, useState, useContext, useCallback } from 'react';
+import React, {
+  createContext,
+  useState,
+  useContext,
+  useCallback,
+  useRef
+} from 'react';
 import Snackbar, { SnackbarOrigin } from '@material-ui/core/Snackbar';
 
 interface Props {
@@ -14,14 +20,14 @@ interface ProviderProps {
 
 export const NotificationProvider = ({ children }: ProviderProps) => {
   const [isVisible, setIsVisible] = useState<boolean>(false);
-  const [message, setMessage] = useState<string>('');
+  const messageRef = useRef<string>('');
   const snackbarOrigin: SnackbarOrigin = {
     vertical: 'bottom',
     horizontal: 'center'
   };
 
   const showNotification = useCallback(async (message: string) => {
-    setMessage(message);
+    messageRef.current = message;
     setIsVisible(true);
     setTimeout(() => {
       setIsVisible(false);
@@ -33,7 +39,7 @@ export const NotificationProvider = ({ children }: ProviderProps) => {
       {children}
       <Snackbar
         open={isVisible}
-        message={message}
+        message={messageRef.current}
         anchorOrigin={snackbarOrigin}
       />
     </Ctx.Provider>
