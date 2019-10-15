@@ -20,6 +20,8 @@ interface ProviderProps {
 
 export const NotificationProvider = ({ children }: ProviderProps) => {
   const [isVisible, setIsVisible] = useState<boolean>(false);
+  // messageの変更は再レンダーのトリガーではないので、
+  // useStateではなくuseRefを使用中
   const messageRef = useRef<string>('');
   const snackbarOrigin: SnackbarOrigin = {
     vertical: 'bottom',
