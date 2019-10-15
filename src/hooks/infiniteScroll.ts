@@ -23,12 +23,9 @@ const useInfiniteScroll = ({ loadMore, initialLoad }: Props) => {
   }, []);
 
   useEffect(() => {
-    const getData = async (load: boolean) => {
-      if (!load) return;
-      await loadMore();
-    };
     const fetchData = async () => {
-      await getData(isFetching);
+      if (!isFetching) return;
+      await loadMore();
       setIsFetching(false);
     };
     fetchData();
